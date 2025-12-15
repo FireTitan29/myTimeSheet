@@ -1,0 +1,20 @@
+<nav>
+    <form method="GET" class="nav-form">
+
+        <label class="nav-icon-label" for='table' data-tip="Timesheet">
+            <img class="nav-icon-svg" src="images/icons/table_icon<?php if ($view === 'table'){ echo '_selected';} ?>.svg">
+            <input hidden type="radio" name="view" id="table" value="table" onchange="this.form.submit()">
+        </label>
+
+        <label class="nav-icon-label" for='dashboard' data-tip="Dashboard">
+            <img class="nav-icon-svg" src="images/icons/dashboard_icon<?php if ($view === 'dashboard'){ echo '_selected';} ?>.svg">
+            <input hidden type="radio" name="view" id="dashboard" value="dashboard" onchange="this.form.submit()">
+        </label>
+
+        <label class="nav-icon-label" for='staffmanagement' data-tip="Staff Management">
+            <img class="nav-icon-svg" src="images/icons/staff_management_icon<?php if ($view === 'staffmanagement'){ echo '_selected';} ?>.svg">
+            <input hidden type="radio" name="view" id="staffmanagement" value="staffmanagement" onchange="this.form.submit()">
+        </label>
+
+    </form>
+</nav>

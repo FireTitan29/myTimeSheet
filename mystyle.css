@@ -1,0 +1,339 @@
+html {
+    font-size: 16px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+}
+
+:root { 
+ --mainColor: rgb(1, 151, 246);
+ --darkColor: rgb(6, 93, 152);
+ --extraDarkColor: rgb(10, 34, 57);
+
+ --lightColor: rgb(194, 231, 255);
+
+ --grayColor: rgb(208, 207, 207);
+ --darkGrayColor: rgb(180, 180, 180);
+ --lightGrayColor: rgb(240, 240, 240);
+
+ --redColor: rgb(239, 35, 60);
+
+ --largeFont: 1.25rem;
+ --mediumFont: 1.1rem;
+ --normalFont: 1rem;
+ --smallFont: 0.8rem;
+}
+
+
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: var(--normalFont);
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.content-holder {
+    padding: 15px;
+}
+
+tr, td, th, table{
+    border: solid;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th {
+    background-color: var(--mainColor);
+    font-size: var(--mediumFont);
+    color: white;
+    border-color: black;
+}
+
+.comments {
+    width: 300px;
+}
+
+th, td{
+    width: 120px;
+    height: 30px;
+}
+
+td, tr {
+    font-size: var(--normalFont);
+}
+
+tr:hover {
+    background-color: var(--lightColor);
+}
+
+
+.weekDay {
+    background-color: var(--grayColor);
+}
+
+.today {
+    background-color: var(--lightColor);
+}
+
+.isLate {
+    background-color: var(--redColor);
+    color: white;
+    border-color: black;
+}
+
+.date-holder {
+    margin-bottom: 10px;
+}
+
+.optionBox {
+    text-align: center;
+    width: 150px;
+    height: 30px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.yearInput {
+    height: 30px;
+    text-align: center;
+    width: 70px;
+    box-sizing: border-box;
+}
+
+.commentField {
+  width: 98.5%;
+  height: 2em;
+  border: none;
+}
+
+.comment-button {
+    font-size: 13px;
+    border-style: none;
+    background-color:rgba(0, 0, 0, 0);
+}
+
+.comment-button:hover {
+    color: var(--mainColor);
+    cursor: pointer;
+}
+
+.commentText {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.commentTextArea:focus {
+    border-color: var(--mainColor);
+}
+
+.commentLabel:hover {
+    color: var(--mainColor);
+    cursor: pointer;
+}
+
+.popUpForm {
+    position: fixed;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    background-color: rgba(14, 20, 40, 0.4);
+}
+
+.popUpForm-Comment-div {
+    margin-top: 30vh;
+    background-color: white;
+    width: 20vw;
+    height: 30vh;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    border: solid;
+    border-radius: 5px;
+    border-color: var(--mainColor);
+}
+
+.managementCommentHeading {
+    font-size: var(--largeFont);
+    color: var(--mainColor);
+    font-weight: bold;
+}
+
+.commentTextArea {
+    box-sizing: border-box;
+    margin-top: 10px;
+    width: 100%;
+    min-height: 200px;
+    resize: none;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+.popUp-ButtonHolder {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+
+nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: var(--white);
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+}
+
+.nav-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.nav-icon-label {
+    position: relative;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
+    justify-content: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.nav-icon-label:hover {
+    background-color: var(--lightGrayColor);
+    cursor: pointer;
+}
+
+.nav-icon-svg {
+    width: 40px;
+}
+
+/* Tool Tip */
+.nav-icon-label:hover::after {
+    opacity: 1;
+    transition: opacity 0.2s ease-in;
+}
+
+.nav-icon-label::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--extraDarkColor);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: rgba(0,0,0,0.2) 0px 4px 10px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+    transition: opacity 0.1s linear;
+}
+
+.form-text-input-email {
+    box-sizing: border-box;
+    height: 30px;
+    width: 295px;
+}
+
+.form-text-input-name {
+    box-sizing: border-box;
+    height: 30px;
+    width: 145px;
+}
+
+.form-text-input-email, .form-text-input-name {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 8px;
+
+    margin-bottom: 10px;
+    /* border-color: var(--darkGrayColor); */
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 1px;
+    
+}
+
+.form-text-input-name::placeholder, .form-text-input-email::placeholder {
+    color: var(--grayColor);
+}
+
+.block-holder {
+    border: solid;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    max-width: 320px;
+    border-radius: 5px;
+    border-color: var(--mainColor);
+}
+
+.block-holder-popup {
+    border: solid;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    max-width: 320px;
+    border-radius: 5px;
+    border-color: var(--mainColor);
+    background-color: white;
+    margin-top: 30vh;
+    height: 240px;
+}
+
+.block-header {
+    font-size: var(--largeFont);
+    color: var(--mainColor);
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.form-button {
+    border-style: none;
+    background-color: var(--mainColor);
+    width: 100px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: white;
+    border-radius: 2px;
+}
+
+.stamp-button {
+    border-style: none;
+    background-color: var(--mainColor);
+    padding-top: 4px;
+    padding-bottom: 4px;
+    color: white;
+    border-radius: 2px;
+}
+
+.form-button:hover, .stamp-button:hover {
+    background-color: var(--darkColor);
+    cursor: pointer;
+}
+
+.form-error-message {
+    display: block;
+    color: var(--redColor);
+    font-size: var(--smallFont);
+}

@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+
+# XAMPP / local config
+*.log
+.env
+
+# IDE
+.vscode/
+
+# Uploaded files (if any)
+uploads/
+
