@@ -17,8 +17,8 @@
             $cutoff = strtotime(date('Y-m-d', strtotime($staffRecord['timeIn'])) . ' 07:30:00');
             
             $isLate = $timeIn > $cutoff;
-}
-        include 'dateRow.php';
+        }
+        include 'components/dateRow.php';
     }
 
     

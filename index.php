@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="mystyle.css">
 </head>
 <body>
-    <?php include 'navigation.php' ?>
+    <?php include 'components/navigation.php' ?>
     <?php 
         $role = 'admin'; 
         $_SESSION['user']['role'] = $role;

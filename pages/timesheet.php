@@ -8,18 +8,15 @@
 <form method="GET">
     <label for="name"> Select Staff Member<br>
     <input type="hidden" name="view" value="table">
-        <select class="optionBox" name="name" id="name" onchange="this.form.submit()">
+        <select class="optionBox-person" name="name" id="name" onchange="this.form.submit()">
             <option hidden default <?php if (!isset($person)) {echo "selected";}?>><?php if ($person) {echo $person;} else {echo 'None';}?></option>
             <?php foreach ($staffMembers AS $name):?>
-                <option <?php if ($person === $name) echo 'selected' ?>><?php echo $name ?></option>
+                <option <?php if ($person === $name) echo 'selected' ?>><?php echo htmlspecialchars($name) ?></option>
             <?php endforeach; ?>
         </select>
     </label>
 </form>
-
-<br>
 <?php endif; ?>
-<h3><?php echo $person; ?></h3>
 <!-- Seleting the Month for the Table -->
 <form class="date-holder" method="GET">
     <input type="hidden" name="view" value="table">
@@ -50,20 +47,4 @@
     </tr>
     <?php fillTable($month, $year, $person);?>
 </table>
-<?php include 'commentPopUp.php'; ?>
-
-<script>
-function openForm(recordID = null, commentText = '', calendarDate = null) {
-    document.getElementById("popUpForm-Comment").style.display = "flex";
-
-    document.getElementById("commentID").value = recordID || '';
-    document.getElementById("commentArea").value = commentText || '';
-    document.getElementById("calendarDate").value = calendarDate || '';
-    
-    document.getElementById("commentArea").focus();
-}
-
-function closeForm() {
-    document.getElementById("popUpForm-Comment").style.display = "none";
-}
-</script>
+<?php include 'components/commentPopUp.php'; ?>

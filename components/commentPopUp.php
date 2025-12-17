@@ -13,3 +13,19 @@
         </div>
     </div>
 </form>
+
+<script>
+function openForm(recordID = null, commentText = '', calendarDate = null) {
+    document.getElementById("popUpForm-Comment").style.display = "flex";
+
+    document.getElementById("commentID").value = recordID || '';
+    document.getElementById("commentArea").value = commentText || '';
+    document.getElementById("calendarDate").value = calendarDate || '';
+    
+    document.getElementById("commentArea").focus();
+}
+
+function closeForm() {
+    document.getElementById("popUpForm-Comment").style.display = "none";
+}
+</script>
