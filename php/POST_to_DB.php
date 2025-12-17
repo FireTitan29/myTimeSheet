@@ -79,7 +79,7 @@
             exit;
         }
 
-        // Clock out now, but only if timeOut is still NULL (extra safety)
+        // Clock out now, but only if timeOut is still NULL
         $stmt = $pdo->prepare("
             UPDATE timesheet
             SET timeOut = NOW()
@@ -144,11 +144,13 @@
         exit;
     } 
 
+    // Adding Staff Member
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["addStaffMember"])) {
-        $firstname = trim($_POST['firstname']) ?? '';
-        $surname = trim($_POST['surname']) ?? '';
-        $email = trim($_POST['email']) ?? '';
-        $number = (string) trim($_POST['number']) ?? '';
+        $firstname = trim($_POST['firstname'] ?? '');
+        $surname = trim($_POST['surname'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $number = trim($_POST['number'] ?? '');
+        $phoneForDb = ($number === '') ? null : $number;
         $role = $_POST['role'] ?? '';
 
         validationStaffInputs($firstname, $surname, $role, $number, $email, $errors);
@@ -162,10 +164,75 @@
             $stmt->bindValue(':name', $name);
             $stmt->bindValue(':email', $email);
             $stmt->bindValue(':role', $role);
-            $stmt->bindValue(':phone', $number);
+            if ($phoneForDb === null) {
+                $stmt->bindValue(':phone', null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(':phone', $phoneForDb);
+            }
             $stmt->execute();
             header('Location: index.php?view=staffmanagement&success=1');
         }
     }
+
+    // Updating Staff Member Details
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateStaffMember'])) {
+        $firstname = trim($_POST['firstname-update'] ?? '');
+        $surname = trim($_POST['surname-update'] ?? '');
+        $email = trim($_POST['email-update'] ?? '');
+        $number = trim($_POST['number-update'] ?? '');
+        $phoneForDb = ($number === '') ? null : $number;
+        $role = $_POST['role-update'] ?? '';
+        $id = $_POST['staffID'] ?? '';
+
+        $person = getStaffMemberDetails($id);
+
+        validationStaffInputs($firstname, $surname, $role, '', $email, $errors, 1, $id);
+
+        // Phone is optional. If provided, enforce uniqueness and 10 digits.
+        if ($number !== '') {
+            if (phoneNumberExists($number) && $number !== ($person['phone'] ?? '')) {
+                $errors['number'] = 'Number already exists';
+            } else if (strlen($number) !== 10) {
+                $errors['number'] = 'Phone number must be 10 digits';
+            }
+        }
+
+        if (empty($errors)) {
+            $pdo = connectToDatabase();
+            $name = $firstname . ' ' . $surname;
+
+            $stmt = $pdo->prepare(
+                'UPDATE staff SET
+                    staffName = :name,
+                    email     = :email,
+                    role      = :role,
+                    phone     = :phone
+                WHERE staffID = :id'
+            );
+
+            $stmt->bindValue(':name', $name);
+            $stmt->bindValue(':email', $email);
+            $stmt->bindValue(':role', $role);
+            if ($phoneForDb === null) {
+                $stmt->bindValue(':phone', null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(':phone', $phoneForDb);
+            }
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+            header("Location: index.php?view=staffmanagement&staffMember=$id");
+        }
+    }
     
+    // Deactivate Staff Member
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deactivate'])) {
+        $staffID = $_POST['staffID'];
+
+        $pdo = connectToDatabase();
+        $stmt = $pdo->prepare('UPDATE staff SET active = 0 WHERE staffID = :staffID');
+        $stmt->bindValue(':staffID', $staffID);
+
+        $stmt->execute();
+        header('Location: index.php?view=staffmanagement');
+    }
 ?>

@@ -2,8 +2,6 @@
     $staffMembers = getAllStaffNames();
 ?>
 
-
-
 <?php if ($role === 'admin'): ?>
 <form method="GET">
     <label for="name"> Select Staff Member<br>

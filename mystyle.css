@@ -375,7 +375,7 @@ nav {
     border-color: var(--mainColor);
     background-color: white;
     margin-top: 30vh;
-    height: 240px;
+    max-height: 300px;
 }
 
 .block-header {
@@ -649,4 +649,20 @@ nav {
     color: var(--mainColor);
     margin-top: 20px;
     margin-bottom: 5px;
+}
+
+.staff-input {
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--mainColor);
+    margin-bottom: 10px;
+    padding: 5px;
+    min-width: 250px;
+}
+
+.edit-staff-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
 }

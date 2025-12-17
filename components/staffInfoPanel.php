@@ -6,18 +6,25 @@
 ?>
 <div class="block-holder-staff">
     <div>
-        <h3 class="staff-info-name-header"><?php if (!empty($selectedPerson)) echo $selectedPerson['staffName']; ?></h3>
-        <span class="small-gray-role-text"><?php if (!empty($selectedPerson)) echo ucwords(strtolower($selectedPerson['role'])); ?></span>
+        <div>
+            <h3 class="staff-info-name-header"><?php if (!empty($selectedPerson)) echo $selectedPerson['staffName']; ?></h3>
+            <span class="small-gray-role-text"><?php if (!empty($selectedPerson)) echo ucwords(strtolower($selectedPerson['role'])); ?></span>
 
-        <div class="staff-info-button-div">
-            <a href="index.php?view=table&name=<?php if (!empty($selectedPerson)) echo $selectedPerson['staffName'];  ?>"><button class="staff-info-button">View timesheet</button></a>
-            <button class="staff-info-button">Edit Info</button>
-            <button class="staff-info-button-red">Deactivate</button>
+            <div class="staff-info-button-div">
+                <a href="index.php?view=table&name=<?php if (!empty($selectedPerson)) echo $selectedPerson['staffName'];  ?>"><button class="staff-info-button">View timesheet</button></a>
+                <button onclick="openUpdateForm()" class="staff-info-button" type="submit">Edit Info</button>
+
+                <form method="POST" style="display:inline; margin: 0px;">
+                    <input type="hidden" name="staffID" value="<?= $selectedPerson['staffID'] ?>">
+                    <button name="deactivate" value="true" type="submit" class="staff-info-button-red">Deactivate</button>
+                </form>
+            </div>
+            <div class="staff-info-contact-div">
+                <p class="contact-p"><span class="highlight-span">Email:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['email']; ?></p>
+                <p class="contact-p"><span class="highlight-span">Phone:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['phone']; ?></p>
+            </div>
         </div>
-        <div class="staff-info-contact-div">
-            <p class="contact-p"><span class="highlight-span">Email:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['email']; ?></p>
-            <p class="contact-p"><span class="highlight-span">Phone:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['phone']; ?></p>
-        </div>
+
         <h3 class="squares-header">This Month</h3>
         <div class="squares-holder">
             <div class="square-block">
@@ -39,3 +46,5 @@
         </div>
     </div>
 </div>
+
+<?php include "components/updateStaffPopUp.php" ?>
