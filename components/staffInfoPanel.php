@@ -29,7 +29,7 @@
         <div class="squares-holder">
             <div class="square-block">
                 <p class="small-text-square-block">Office Hours</p>
-                <p class="large-text-square-block"><?= $personStats['officeHours'] ?></p>
+                <p class="large-text-square-block"><?= $personStats['officeHours'] ?>h</p>
             </div>
             <div class="square-block">
                 <p class="small-text-square-block">Late Arrivals</p>
@@ -44,6 +44,10 @@
                 <p class="large-text-square-block"><?= $personStats['daysMissed'] ?></p>
             </div>
         </div>
+        <br>
+        <p class="contact-p"><span class="highlight-span">Average Arival Time:</span><span class="dark-color"> <?= $personStats['avgTimeIn'] ?></span></p>
+        <p class="contact-p"><span class="highlight-span">Leave accrued (YTD):</span><span class="dark-color"> <?= calculateLeaveDays($selectedPerson['staffID']) ?></span></p>
+        <p>Leave Section coming soon</p>
     </div>
 </div>
 

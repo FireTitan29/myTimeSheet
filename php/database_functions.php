@@ -108,6 +108,8 @@
             'lateArrivals' => 0,
             'daysWorked' => 0,
             'daysMissed' => 0,
+            'avgTimeIn' => 0,
+            'leaveDays' => 0,
         ];
 
         $pdo = connectToDatabase();
@@ -156,6 +158,8 @@
         $daysWorkedCount = 0;
         $daysMissedCount = 0;
         $officeSeconds = 0;
+        $timeInTotalSeconds = 0;
+        $timeInCount = 0;
 
         // Track which dates were actually worked (weekday + timeIn present) up to today
         $todayStr = $today->format('Y-m-d');
@@ -184,6 +188,14 @@
                 $dow = (int)date('N', strtotime($dateStr)); // 1=Mon ... 7=Sun
                 if ($dow <= 5) {
                     $workedWeekdayDates[$dateStr] = true;
+
+                    // Avg arrival time: accumulate seconds since midnight for weekday arrivals
+                    $timeInDT = new DateTime($timeInStr);
+                    
+                    $timeInTotalSeconds += ((int)$timeInDT->format('H') * 3600)
+                                         + ((int)$timeInDT->format('i') * 60)
+                                         + (int)$timeInDT->format('s');
+                    $timeInCount++;
                 }
 
                 // Late arrival = timeIn after 07:30 on that same day
@@ -229,12 +241,76 @@
             $daysMissedCount = 0;
         }
 
+        // Average arrival time (weekdays only, up to today)
+        if ($timeInCount > 0) {
+            $avgSeconds = (int)round($timeInTotalSeconds / $timeInCount);
+            $personStats['avgTimeIn'] = gmdate('H:i', $avgSeconds);
+        } else {
+            $personStats['avgTimeIn'] = null;
+        }
+
         $personStats['lateArrivals'] = $lateArrivalsCount;
         $personStats['daysWorked'] = $daysWorkedCount;
         $personStats['daysMissed'] = $daysMissedCount;
         $personStats['officeHours'] = (int)round($officeSeconds / 3600);
-
+        
         return $personStats;
+    }
+
+    function calculateLeaveDays($staffID) {
+        $pdo = connectToDatabase();
+
+        $stmt = $pdo->prepare(
+            'SELECT ROUND(COUNT(DISTINCT date) / 17, 2) AS leaveAccrued
+            FROM timesheet
+            WHERE staffID = :staffID
+            AND timeIn IS NOT NULL
+            AND date >= MAKEDATE(YEAR(CURDATE()), 1)
+            AND date <= CURDATE()'
+        );
+
+        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $leaveAccrued = $stmt->fetchColumn();
+        closeDatabase($pdo);
+        
+        $leaveAccrued = min($leaveAccrued, 15);
+        return (float)$leaveAccrued;
+    }
+
+    function currentlyInAndOut() {
+        $pdo = connectToDatabase();
+        $today = date('Y-m-d');
+
+        $stmt = $pdo->prepare(
+            'SELECT s.staffID, s.staffName, t.timeIn, t.timeOut
+            FROM staff s
+            LEFT JOIN timesheet t
+            ON t.staffID = s.staffID
+            AND t.date = :today
+            WHERE s.active = 1
+            ORDER BY s.staffName ASC'
+        );
+
+        $stmt->bindValue(':today', $today);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function checkStaffPin($pin) {
+        $pdo = connectToDatabase();
+        $stmt = $pdo->prepare('SELECT staffID FROM staff WHERE pin =:pin LIMIT 1');
+        $stmt->bindValue(':pin', $pin);
+
+        $stmt->execute();
+        
+        $staffID = $stmt->fetchColumn();
+
+        if (empty($staffID)) return null;
+        
+        return $staffID;
     }
 
 ?>

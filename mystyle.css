@@ -10,8 +10,6 @@ textarea:focus {
     outline: none;
 }
 
-
-
 :root { 
  --mainColor: rgb(1, 151, 246);
  --darkColor: rgb(6, 93, 152);
@@ -24,6 +22,7 @@ textarea:focus {
  --lightGrayColor: #f2f2f2;
 
  --redColor: rgb(239, 35, 60);
+ --lightRedColor: rgb(255, 199, 206);
  --darkRedColor: rgb(190, 35, 60);
 
  --extraLargeFont: 1.75rem;
@@ -32,8 +31,6 @@ textarea:focus {
  --normalFont: 1rem;
  --smallFont: 0.8rem;
 }
-
-
 
 * {
     font-family: Nunito Sans;
@@ -45,7 +42,6 @@ body {
     margin: 0;
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
 }
 
 .content-holder {
@@ -368,14 +364,15 @@ nav {
 .block-holder-popup {
     border: solid;
     padding: 20px;
-    display: flex;
-    justify-content: center;
-    max-width: 320px;
+    display: block;
     border-radius: 5px;
     border-color: var(--mainColor);
     background-color: white;
     margin-top: 30vh;
-    max-height: 300px;
+    max-height: 380px;
+    width: 80vw;                
+    max-width: 650px;
+    box-sizing: border-box;
 }
 
 .block-header {
@@ -394,7 +391,6 @@ nav {
     padding-bottom: 8px;
     color: white;
     border-radius: 2px;
-
 }
 
 .stamp-button {
@@ -417,6 +413,14 @@ nav {
     font-size: var(--smallFont);
 }
 
+  .error {
+    display: block;
+    color: var(--redColor);
+    font-size: 0.9rem;
+    margin-top: 6px;
+    min-height: 1.2em;
+  }
+
 .staff-radio {
     display: none;
 }
@@ -430,7 +434,6 @@ nav {
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 12px;
-    /* color: var(--darkColor); */
     border-radius: 2px;
 }
 
@@ -459,8 +462,6 @@ nav {
     border-style: none;
     background-color: var(--mainColor);
     padding: 8px;
-    /* padding-top: 1px;
-    padding-bottom: 14px; */
     color: white;
     border-radius: 100%;
 }
@@ -523,7 +524,6 @@ nav {
     color: var(--darkGrayColor);
     font-size: var(--smallFont);
 }
-
 
 .staffmanagment-holder {
     display: flex;
@@ -665,4 +665,199 @@ nav {
     display: flex;
     flex-direction: column;
     justify-content: left;
+}
+
+.dark-color {
+    color: var(--darkColor);
+}
+
+/* Dashboard */
+.entire-block-dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* was space-between */
+}
+
+.dashboard-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 580px;
+    /* margin-right: 10px; */
+}
+
+.in-out-person {
+    display: block;
+    margin-bottom: 5px;
+    border-style: none;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 12px;
+    border-radius: 2px;
+}
+
+.in-person {
+    background-color: var(--lightColor);
+    color: var(--darkColor);
+}
+
+.out-person {
+    background-color: var(--lightRedColor);
+    color: var(--darkRedColor);
+}
+
+.timein-dashboard {
+    font-size: var(--smallFont);
+    color: var(--darkColor);
+}
+
+
+.timeout-dashboard {
+    font-size: var(--smallFont);
+    color: var(--darkRedColor);
+}
+
+.block-holder-dashboard {
+    border: solid;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border-color: var(--mainColor);
+    width: 260px;
+    margin-right: 10px;
+}
+
+.block-holder-today-overview {
+    background-color: #fafafa;
+    border: solid;
+    padding: 20px 10px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    border-color: var(--grayColor);
+    width: 550px;
+    height: 150px;
+}
+
+.late-pill {
+    font-size: var(--smallFont);
+    color: var(--redColor);
+}
+
+.clock-in-body {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+
+.clock-in-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clock-in-radio-holder {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    justify-content: space-between;
+    width: 250px;
+
+}
+
+.clock-in-radio {
+    background-color: var(--mainColor);
+    color: white;
+    width: 120px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    text-align: center;
+    font-size: var(--largeFont);
+    font-weight: 700;
+}
+.pin-input {
+    width: 55px;
+    height: 50px;
+    box-sizing: border-box;
+    border-color: var(--mainColor);
+
+    text-align: center;
+    line-height: 50px;
+    color: var(--darkColor);
+    font-size: 28px;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 0;
+    margin-right: 8px;
+
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.clock-in-radio:hover {
+    background-color: var(--darkColor);
+    color: white;
+    cursor: pointer;
+}
+
+.clock-radio-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+.clock-in-radio:has(.clock-radio-input:checked) {
+    background-color: var(--darkColor);
+    color: white;
+}
+
+.pin-input {
+    text-indent: 0;
+}
+
+.clock-in-tool, .clock-in-tool-pin {
+    color: var(--mainColor);
+}
+
+.clock-in-tool-pin {
+    margin-bottom: 10px;
+}
+
+.clock-in-button {
+    margin-top: 20px;
+    font-size: var(--largeFont);
+}
+
+.reasonPopup {
+    width: 80vw;
+}
+
+.textReason {
+    width: 100%;
+}
+
+.clock-in-late {
+    color: var(--darkColor);
+}
+
+
+@media (max-height: 920px) {
+  .entire-block-dashboard {
+    flex-direction: row;
+  }
+
+  .block-holder-today-overview {
+    margin-top: 35px;
+  }
 }
