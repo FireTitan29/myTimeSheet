@@ -61,7 +61,7 @@
         </button>
     <?php elseif ($isManager && $person !== ''): ?>
         <!-- Record exists and (maybe) comment exists -> label to edit/view -->
-        <label data-tip="<?= htmlspecialchars($staffRecord['management_comment'] ?? '') ?>"
+        <label id="managment-comment-closed-<?php if (isset($staffRecord['recordID'])) echo $staffRecord['recordID']; ?>" data-tip="Edit comment"
             class="commentLabel"
             onclick='openForm(
                 <?= (int)$staffRecord["recordID"] ?>,
@@ -81,6 +81,10 @@
                 } 
             ?>
         </label>
+        <div class="comment-block" id="managment-comment-open-<?php if (isset($staffRecord['recordID'])) echo $staffRecord['recordID']; ?>" style="display: none; margin-top: 15px;">
+            <span class="reason-table-heading">Management Comment</span>
+            <p class="reason-table-text"><?= htmlspecialchars($staffRecord['management_comment']) ?></p>
+        </div>
     <?php else: ?>
         <div class="commentLabelNoEdit"><?= $hasComment
                 ? htmlspecialchars($staffRecord['management_comment'])
@@ -110,8 +114,8 @@
 </td>
     <!-- Staff Comment -->
     <td class="staff-comments">
-    <?php if (!empty($staffRecord['staff_comment_late']) || !empty($staffRecord['staff_comment_early'])): ?>
-        <button class="toggle-comments" onclick="toggleComments(this)">
+    <?php if (!empty($staffRecord['staff_comment_late']) || !empty($staffRecord['staff_comment_early']) || !empty($staffRecord['management_comment'])): ?>
+        <button class="toggle-comments" onclick="toggleComments(this, <?= $staffRecord['recordID'] ?>)">
             View comments
         </button>
 
@@ -135,11 +139,15 @@
 </tr>
 
 <script>
-function toggleComments(button) {
+function toggleComments(button, recordID) {
     const content = button.nextElementSibling;
     const isOpen = content.style.display === 'block';
-
+    const managementCommentClosed = document.getElementById(`managment-comment-closed-${recordID}`);
+    const managementCommentOpen = document.getElementById(`managment-comment-open-${recordID}`);
     content.style.display = isOpen ? 'none' : 'block';
+    managementCommentClosed.style.display = isOpen ? 'block' : 'none';
+
+    managementCommentOpen.style.display = isOpen ? 'none' : 'block';
     button.textContent = isOpen ? 'View comments' : 'Hide comments';
 }
 </script>

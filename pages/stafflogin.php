@@ -1,10 +1,11 @@
 <?php 
     $pin = $_POST['pin'] ?? '';
     $typeOfComment = $errors['earlyLate'] ?? '';
-?>
+    ?>
 
 <?php if (!isset($errors['late'])): ?>
-<div class="clock-in-body">
+    <div class="clock-in-body">
+    <?php include 'components/successMessage.php'; ?>
     <form action="" method="POST" class="clock-in-form" id="clockInForm">
         <input type="hidden" name="clockInClockOut" value="1">
         <span class="error" id='error-pin'><?php if (isset($errors['pin'])) echo $errors['pin']; ?></span>

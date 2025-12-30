@@ -198,7 +198,7 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
 
 .commentLabel {
     position: relative;
-    font-size: var(--normalFont);
+    font-size: var(--smallFont);
 }
 
 .commentLabel:hover {
@@ -224,12 +224,11 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     border-radius: 5px;
     font-size: var(--smallFont);
     text-align: left;
-    min-width: 250px; 
-    max-width: 350px;          /* REQUIRED */
-    white-space: normal;       /* allow wrapping */
-    word-break: normal;        /* don't break every word */
-    overflow-wrap: break-word; /* only break long words */
-
+    min-width: 80px; 
+    /* max-width: 350px;
+    white-space: normal;
+    word-break: normal; 
+    overflow-wrap: break-word; */
 
     box-shadow: rgba(0,0,0,0.2) 0px 4px 10px;
 
@@ -289,10 +288,10 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
 }
 
 .comment-block {
-    text-align:left;
+    text-align:justify;
     margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 15px;
-    margin-top: 15px;
 }
 
 .reason-table-heading {
@@ -308,10 +307,12 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
 
 .comments-content {
     display: none;
-    margin-top: 8px;
+    /* margin-top: 8px; */
 }
 
 .toggle-comments {
+    margin-top: 5px;
+    margin-bottom: 5px;
     background: none;
     border: none;
     color: var(--mainColor);
@@ -925,6 +926,52 @@ nav {
     color: var(--darkColor);
 }
 
+.success-block {
+    position: fixed;
+    z-index: 100;
+    max-width: 250px;
+    min-width: 280px;
+    padding: 10px;
+    margin-bottom: 15vh;
+    background-color: var(--lightColor);
+    border-style: solid;
+    border-color: var(--mainColor);
+    border-width: 2px;
+    border-radius: 5px;
+    color: var(--extraDarkColor);
+    text-align: center;
+}
+
+.success-heading {
+    margin: 0px;
+    color: var(--mainColor);
+}
+
+.success-p {
+    margin: 0px;
+    
+}
+
+.success-bold-time {
+    font-weight: bold;
+    color: var(--mainColor);
+}
+
+.success-block {
+    animation: fadeSlideOut 1.4s ease-in-out 2s forwards;
+}
+
+@keyframes fadeSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+        visibility: hidden;
+    }
+}
 
 @media (max-height: 920px) {
   .entire-block-dashboard {

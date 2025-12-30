@@ -169,8 +169,10 @@
             $stmt->bindValue(':date', $date);
             $stmt->bindValue(':reason_comment', $lateReasonText);
             $stmt->execute();
-
+            $_SESSION['clock']['type'] = 'in';
+            $_SESSION['clock']['staff_id'] = $staffMemberID;
             header('Location: index.php?success=1');
+
         } else if ($result && !$result['timeIn']) { 
             $stmt = $pdo->prepare(' UPDATE timesheet
             SET timeIn = NOW(),
@@ -183,7 +185,8 @@
             $stmt->bindValue(':date', $date);
             $stmt->bindValue(':reason_comment', $lateReasonText);
             $stmt->execute();
-
+            $_SESSION['clock']['type'] = 'in';
+            $_SESSION['clock']['staff_id'] = $staffMemberID;
             header('Location: index.php?success=2');
         } else {
 
@@ -238,6 +241,8 @@
         $stmt->bindValue(':reason_comment', $lateReasonText);
         $stmt->execute();
 
+        $_SESSION['clock']['type'] = 'out';
+        $_SESSION['clock']['staff_id'] = $staffMemberID;
         header('Location: index.php?success=1');
         closeDatabase($pdo);
         exit;

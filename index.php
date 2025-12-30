@@ -21,11 +21,22 @@
     }
 
     $view = $_GET['view'] ?? 'stafflogin';
+
+    $pagenames = [  'dashboard'=>'Dashboard', 
+                    'table'=>'Calander Table', 
+                    'staffmanagement'=>'Staff Management', 
+                    'stafflogin'=>'Staff Login', 
+                    'admin'=>'Admin Login'];
+
+    if (!key_exists($view, $pagenames)) $view = 'stafflogin';
+    
+    $page = $pagenames[$view] ?? $pagenames['stafflogin'];
+
     $person = $_SESSION['name'] ?? '';
 
     $month;
     $monthNameStr;
-
+    
 ?>
 
 <!DOCTYPE html>
@@ -33,8 +44,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Login Page</title>
+    <title>Healthy Pet: <?= $page ?></title>
     <link rel="stylesheet" href="mystyle.css">
+    <link rel="icon" type="image/x-icon" href="images/icons/staff_management_icon.svg">
 </head>
 <body <?php if ($view === 'stafflogin' || $view === '') echo 'style="justify-content: center;"'?>>
 

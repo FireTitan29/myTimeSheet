@@ -48,9 +48,9 @@
                             <?php $out++; ?>
                         </label>
                     <?php elseif ($person['timeOut'] && $person['timeIn']): ?>
-                        <label class="in-out-person out-person">
+                        <label class="in-out-person in-person">
                             <?= $person['staffName'] ?><br>
-                            <span class="timeout-dashboard">Clocked Out: <?= date('H:i', strtotime($person['timeOut'])); ?></span>
+                            <span class="timein-dashboard">Clocked Out: <?= date('H:i', strtotime($person['timeOut'])); ?></span>
                             <?php $out++; ?>
                         </label>
                     <?php endif; ?>
