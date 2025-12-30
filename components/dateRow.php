@@ -60,8 +60,8 @@
             📝 Add Comment
         </button>
     <?php elseif ($isManager && $person !== ''): ?>
-        <!-- Record exists and (maybe) comment exists → label to edit/view -->
-        <label
+        <!-- Record exists and (maybe) comment exists -> label to edit/view -->
+        <label data-tip="<?= htmlspecialchars($staffRecord['management_comment'] ?? '') ?>"
             class="commentLabel"
             onclick='openForm(
                 <?= (int)$staffRecord["recordID"] ?>,
@@ -69,9 +69,17 @@
                 <?= json_encode($dbDate) ?>
             )'
         >
-            <?= $hasComment
-                ? htmlspecialchars($staffRecord['management_comment'])
-                : 'Add comment' ?>
+            <?php if ($hasComment) {
+                    $fullComment = $staffRecord['management_comment'];
+                    $shortComment = mb_strlen($fullComment) > 30
+                        ? mb_substr($fullComment, 0, 30) . '…'
+                        : $fullComment;
+
+                    echo htmlspecialchars($shortComment);
+                } else {
+                    echo 'Add comment';
+                } 
+            ?>
         </label>
     <?php else: ?>
         <div class="commentLabelNoEdit"><?= $hasComment
@@ -100,5 +108,38 @@
 
 <?php endif; ?>
 </td>
-    <td></td>
+    <!-- Staff Comment -->
+    <td class="staff-comments">
+    <?php if (!empty($staffRecord['staff_comment_late']) || !empty($staffRecord['staff_comment_early'])): ?>
+        <button class="toggle-comments" onclick="toggleComments(this)">
+            View comments
+        </button>
+
+        <div class="comments-content" style="display:none;">
+            <?php if (!empty($staffRecord['staff_comment_late'])): ?>
+                <div class="comment-block">
+                    <span class="reason-table-heading">Arrived Late - Reason</span>
+                    <p class="reason-table-text"><?= htmlspecialchars($staffRecord['staff_comment_late']) ?></p>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($staffRecord['staff_comment_early'])): ?>
+                <div class="comment-block">
+                    <span class="reason-table-heading">Left Early - Reason</span>
+                    <p class="reason-table-text"><?= htmlspecialchars($staffRecord['staff_comment_early']) ?></p>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+</td>
 </tr>
+
+<script>
+function toggleComments(button) {
+    const content = button.nextElementSibling;
+    const isOpen = content.style.display === 'block';
+
+    content.style.display = isOpen ? 'none' : 'block';
+    button.textContent = isOpen ? 'View comments' : 'Hide comments';
+}
+</script>

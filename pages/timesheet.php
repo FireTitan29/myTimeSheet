@@ -1,7 +1,46 @@
 <?php 
     $staffMembers = getAllStaffNames();
-?>
+    
+    // Determine "today"
+    $today = time();
+    $cutoffDay = 26;
 
+    // Base date (from GET or today)
+    if (isset($_GET['month'], $_GET['year'])) {
+        $baseDate = strtotime('1 ' . $_GET['month'] . ' ' . (int)$_GET['year']);
+    } elseif (isset($_GET['month'])) {
+        $baseDate = strtotime('1 ' . $_GET['month']);
+    } else {
+        $baseDate = $today;
+    }
+
+    // Determine payroll period start (26th logic)
+    if ((int)date('d', $today) >= $cutoffDay) {
+        $periodStart = strtotime(date('Y-m-' . $cutoffDay, $baseDate));
+    } else {
+        $periodStart = strtotime(date('Y-m-' . $cutoffDay, strtotime('-1 month', $baseDate)));
+    }
+
+    // Payroll month is month AFTER period start
+    $payrollMonthDate = strtotime('+1 month', $periodStart);
+
+    // Final month values
+    $month        = $_GET['month'] ?? date('m', $payrollMonthDate);
+    $monthNameStr = $_GET['month'] ?? date('F', $payrollMonthDate);
+
+    // Final year (handles Dec -> Jan rollover correctly)
+    $year = $_GET['year'] ?? (
+        date('m', $payrollMonthDate) === '01' && date('m', $periodStart) === '12'
+            ? (int)date('Y', $periodStart) + 1
+            : (int)date('Y', $periodStart)
+    );
+
+    // Selected payroll month/year (e.g. February 2026)
+    $selectedMonth = (int)$month;
+    $selectedYear  = (int)$year;
+
+
+?>
 <?php if ($role === 'admin'): ?>
 <form method="GET">
     <label for="name"> Select Staff Member<br>

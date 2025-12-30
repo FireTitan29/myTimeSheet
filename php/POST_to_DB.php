@@ -145,7 +145,7 @@
     } 
 
     // Staff Member Clock in from PIN Page
-    function clockInStaff($staffMemberID) {
+    function clockInStaff($staffMemberID, $lateReasonText = null) {
         $date = date('Y-m-d');
 
         $pdo = connectToDatabase();
@@ -163,23 +163,27 @@
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$result) {
-            $stmt = $pdo->prepare('INSERT INTO timesheet (staffID, date, timeIn) 
-                                    VALUES (:id, :date, NOW())');
+            $stmt = $pdo->prepare('INSERT INTO timesheet (staffID, date, timeIn, staff_comment_late) 
+                                    VALUES (:id, :date, NOW(), :reason_comment)');
             $stmt->bindValue(':id', $staffMemberID);
             $stmt->bindValue(':date', $date);
-    
+            $stmt->bindValue(':reason_comment', $lateReasonText);
             $stmt->execute();
+
             header('Location: index.php?success=1');
         } else if ($result && !$result['timeIn']) { 
-             $stmt = $pdo->prepare(' UPDATE timesheet
-            SET timeIn = NOW()
+            $stmt = $pdo->prepare(' UPDATE timesheet
+            SET timeIn = NOW(),
+            staff_comment_late = :reason_comment
             WHERE staffID = :id
             AND date = :date
             AND timeIn IS NULL
         ');
             $stmt->bindValue(':id', $staffMemberID);
             $stmt->bindValue(':date', $date);
-                        $stmt->execute();
+            $stmt->bindValue(':reason_comment', $lateReasonText);
+            $stmt->execute();
+
             header('Location: index.php?success=2');
         } else {
 
@@ -190,7 +194,7 @@
     }
 
     // Staff Member Clock out from PIN Page
-    function clockOutStaff($staffMemberID) {
+    function clockOutStaff($staffMemberID, $lateReasonText = null) {
         $date = date('Y-m-d');
 
         $pdo = connectToDatabase();
@@ -223,13 +227,15 @@
         // Clock out now, but only if timeOut is still NULL
         $stmt = $pdo->prepare("
             UPDATE timesheet
-            SET timeOut = NOW()
+            SET timeOut = NOW(), 
+            staff_comment_early = :reason_comment
             WHERE staffID = :id
             AND date = :date
             AND timeOut IS NULL
         ");
         $stmt->bindValue(':id', $staffMemberID, PDO::PARAM_INT);
         $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+        $stmt->bindValue(':reason_comment', $lateReasonText);
         $stmt->execute();
 
         header('Location: index.php?success=1');
@@ -278,6 +284,7 @@
                     } else {
                         $errors['late'] = getStaffMemberDetails($staffID)['staffName'];
                         $errors['offence'] = "You're clocking in <i><strong>after</strong></i> your scheduled start time (07:30). Please add a short note for your manager.";
+                        $errors['earlyLate'] = 'late';
                     }
 
                 // Clocked in but not clocked out yet
@@ -291,7 +298,43 @@
                     } else {
                         $errors['late'] = getStaffMemberDetails($staffID)['staffName'];
                         $errors['offence'] = "You're clocking out <i><strong>before</strong></i> your scheduled end time (17:30). Please add a short note for your manager.";
+                        $errors['earlyLate'] = 'early';
                     }
+                }
+            }
+        }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['exceptionFormSubmission'])) {
+        $pin = trim($_POST['pin'] ?? '');
+        $lateReasonText = trim($_POST['lateReasonArea'] ?? '');
+        $commentType = trim($_POST['typeOfComment'] ?? '');
+
+        if ($pin === '') {
+            $errors['pin'] = 'Cannot be Empty';
+        } else {
+            $staffID = checkStaffPin($pin);
+
+            if (!$staffID) {
+                $errors['pin'] = 'Invalid PIN';
+            } else {
+                $record = getRecord($staffID, date('Y-m-d'));
+
+                // Determine today's state
+                $hasIn  = ($record && !empty($record['timeIn']));
+                $hasOut = ($record && !empty($record['timeOut']));
+
+                // If both timeIn and timeOut exist, they've already completed the day
+                if ($hasIn && $hasOut) {
+                    $errors['pin'] = 'You have already completed your day';
+
+                // Not clocked in yet
+                } elseif (!$hasIn) {
+                    clockInStaff($staffID, $lateReasonText);
+
+                // Clocked in but not clocked out yet
+                } else {
+                    clockOutStaff($staffID, $lateReasonText);
                 }
             }
         }

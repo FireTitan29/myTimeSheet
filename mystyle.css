@@ -196,9 +196,47 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     border-color: var(--mainColor);
 }
 
+.commentLabel {
+    position: relative;
+    font-size: var(--normalFont);
+}
+
 .commentLabel:hover {
     color: var(--mainColor);
     cursor: pointer;
+}
+
+.commentLabel:hover::after {
+    opacity: 1;
+    transition: opacity 0.2s ease-in;
+}
+
+.commentLabel::after {
+    content: attr(data-tip);
+    position: absolute;
+
+    left: calc(100% + 5px);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--extraDarkColor);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: var(--smallFont);
+    text-align: left;
+    min-width: 250px; 
+    max-width: 350px;          /* REQUIRED */
+    white-space: normal;       /* allow wrapping */
+    word-break: normal;        /* don't break every word */
+    overflow-wrap: break-word; /* only break long words */
+
+
+    box-shadow: rgba(0,0,0,0.2) 0px 4px 10px;
+
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+    transition: opacity 0.1s linear;
 }
 
 .popUpForm {
@@ -248,6 +286,42 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     display: flex;
     justify-content: space-evenly;
     text-align: center;
+}
+
+.comment-block {
+    text-align:left;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.reason-table-heading {
+    color: var(--darkColor);
+    font-size: small;
+    font-weight: bold;
+}
+
+.reason-table-text {
+    font-size: var(--smallFont);
+    margin: 0px;
+}
+
+.comments-content {
+    display: none;
+    margin-top: 8px;
+}
+
+.toggle-comments {
+    background: none;
+    border: none;
+    color: var(--mainColor);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0;
+}
+
+.toggle-comments:hover {
+    text-decoration: underline;
 }
 
 

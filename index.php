@@ -26,16 +26,6 @@
     $month;
     $monthNameStr;
 
-    if (isset($_GET['month'])) {
-        $month = date('m', strtotime($_GET['month'])); 
-        $monthNameStr = $_GET['month'];
-    } else {
-        $month = date('m', time());
-        $monthNameStr = date('F', time()); 
-    }
-
-    $year = !empty($_GET['year']) ? (int)$_GET['year'] : (int)date('Y');
-
 ?>
 
 <!DOCTYPE html>

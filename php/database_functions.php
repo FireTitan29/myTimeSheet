@@ -62,6 +62,13 @@
     function filltable($month, $year, $personName) {
         $staffMemberID = getStaffMemberID($personName);
 
+        if (!is_numeric($month)) {
+            $month = date('m', strtotime('1 ' . $month));
+        }
+
+        $month = (int)$month;
+        $year  = (int)$year;
+
         // Work out previous month + year
         $prevMonth = $month - 1;
         $prevYear  = $year;

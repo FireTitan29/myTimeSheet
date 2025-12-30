@@ -1,4 +1,9 @@
-<?php $pin = ''; ?>
+<?php 
+    $pin = $_POST['pin'] ?? '';
+    $typeOfComment = $errors['earlyLate'] ?? '';
+?>
+
+<?php if (!isset($errors['late'])): ?>
 <div class="clock-in-body">
     <form action="" method="POST" class="clock-in-form" id="clockInForm">
         <input type="hidden" name="clockInClockOut" value="1">
@@ -53,19 +58,23 @@
         <button type="submit" id="hiddenSubmit" style="display:none;">Submit</button>
     </form>
 </div>
+<?php endif;?>
 
-<!-- NOW I JUST NEED TO ADD THE STUFF FOR THIS FORM SUBMIT! -->
 <?php if (isset($errors['late'])): ?>
     <div class="popUpForm" style="display: flex;" id="addStaff-form">
         <div class="block-holder-popup reasonPopup" >
             <div>
                 <h3 class="block-header">Hi <?php if (isset($errors['late'])) echo $errors['late']?> 👋</h3>
-                <span class="clock-in-late"><?php if (isset($errors['offence'])) echo $errors['offence']?></span>
+                <span class="clock-in-late"><?php if (isset($errors['offence'])) {
+                    echo $errors['offence'];
+                    
+                } ?></span>
                 <form method="POST">
                     <input type="hidden" name="pin" id="pinLate" value="<?= $pin ?>">
+                    <input type="hidden" name="typeOfComment" id="typeOfComment" value="<?= $typeOfComment ?>">
                     <textarea name="lateReasonArea" placeholder="Add details (e.g. traffic, appointment, delivery)" class="commentTextArea textReason" id="lateReasonArea" required></textarea>
                     <br>
-                    <button class="form-button" type="submit">Confirm</button>
+                    <button name="exceptionFormSubmission" value="1" class="form-button" type="submit">Confirm</button>
                 </form>
             </div>
         </div>
