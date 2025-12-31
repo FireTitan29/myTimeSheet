@@ -41,8 +41,11 @@
                 <input type="hidden" name="staffID" value="<?= $id ?>">
 
                 <br>
-                <button class="form-button" type="submit">Submit</button>
-                <button class="form-button" type="button" onclick="closeUpdateForm()">Cancel</button>
+                <div class="button-div-popup">
+                    <button class="form-button" type="submit">Submit</button>
+                    <span style="margin-right: 5px;"></span>
+                    <button class="form-button" type="button" onclick="closeUpdateForm()">Cancel</button>
+                </div>
             </form>
         </div>
     </div>

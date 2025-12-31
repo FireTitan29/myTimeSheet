@@ -1,7 +1,7 @@
 <?php
-
     session_start();
-
+    define('APP_RUNNING', true); 
+    
     header("Cache-Control: no-cache, no-store, must-revalidate");
     header("Pragma: no-cache"); 
     header("Expires: 0"); 
@@ -24,7 +24,22 @@
         }
     }
 
-    $view = $_GET['view'] ?? 'stafflogin';
+    $view = $_GET['view'] ?? '';
+
+    if ($view ==='logout') {
+        unset($_SESSION['admin']);
+        session_destroy();
+        header('Location: index.php');
+        exit;
+    }
+
+    if (($view === 'dashboard' || $view === 'table' || $view === 'staffmanagement') && !isset($_SESSION['admin'])) {
+        header('Location: index.php?view=admin');
+        exit;
+    }
+
+    if (isset($_SESSION['admin']) && $view === '') $view = 'table';
+    elseif (!isset($_SESSION['admin']) && $view === '') $view = 'stafflogin';
 
     $pagenames = [  'dashboard'=>'Dashboard', 
                     'table'=>'Calander Table', 
@@ -40,7 +55,7 @@
 
     $month;
     $monthNameStr;
-    
+    $role = $_SESSION['user']['role'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -52,22 +67,20 @@
     <link rel="stylesheet" href="mystyle.css">
     <link rel="icon" type="image/x-icon" href="images/icons/staff_management_icon.svg">
 </head>
-<body <?php if ($view === 'stafflogin' || $view === '') echo 'style="justify-content: center;"'?>>
+<body <?php if ($view === 'stafflogin') echo 'style="justify-content: center;"'?>>
 
-    <?php if ($view !== 'stafflogin' && $view !== '') include 'components/navigation.php'; ?>
-
-    <div class="<?php if ($view !== 'stafflogin' && $view !== '') echo 'content-holder'?>">
-
-    <?php 
-        $role = 'admin'; 
-        $_SESSION['user']['role'] = $role;
-    ?>
-
-        <?php 
-            if ($view === 'table') include 'pages/timesheet.php'; 
-            else if ($view === 'staffmanagement') include 'pages/staffmanagement.php';
-            else if ($view === 'dashboard') include 'pages/dashboard.php';
-            else if ($view === 'stafflogin') include 'pages/stafflogin.php'; 
+    <?php if (isset( $_SESSION['admin'])) include 'components/navigation.php'; ?>
+    
+    <div class="<?php if (isset( $_SESSION['admin'])) echo 'content-holder'?>">
+    <?php
+            if (isset( $_SESSION['admin'])) {
+                if ($view === 'staffmanagement') include 'pages/staffmanagement.php';
+                else if ($view === 'dashboard') include 'pages/dashboard.php';
+                else include 'pages/timesheet.php';
+            } else {
+                if ($view === 'admin') include 'pages/adminlogin.php';
+                else include 'pages/stafflogin.php';
+            }
         ?>
     </div>
 </body>

@@ -1,4 +1,11 @@
 <?php
+if (!defined('APP_RUNNING')) {
+    header("Location: ../index.php");
+    exit;
+}
+?>
+
+<?php
     $staffMembers = getAllStaff();
     $staffCount = sizeof($staffMembers);
     $role = $_GET['role'] ?? '';

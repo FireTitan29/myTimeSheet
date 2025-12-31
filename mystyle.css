@@ -252,39 +252,48 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
 .popUpForm-Comment-div {
     margin-top: 30vh;
     background-color: white;
-    width: 20vw;
-    height: 30vh;
-    min-width: 300px;
+    height: 300px;
     display: flex;
     justify-content: center;
     padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 5px;
 
     border: solid;
     border-radius: 5px;
     border-color: var(--mainColor);
 }
 
+
 .managementCommentHeading {
     font-size: var(--largeFont);
     color: var(--mainColor);
     font-weight: bold;
+    margin-left: 20px;
 }
 
 .commentTextArea {
     box-sizing: border-box;
     margin-top: 10px;
-    width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    min-width: 350px;
     min-height: 200px;
     resize: none;
     margin-bottom: 5px;
     border-radius: 3px;
 }
 
+.button-div-popup {
+    margin-top: 1px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
 .popUp-ButtonHolder {
     display: flex;
-    justify-content: space-evenly;
-    text-align: center;
+    justify-content: space-around;
+    width: 215px;
 }
 
 .comment-block {
@@ -437,6 +446,8 @@ nav {
 }
 
 .block-holder-popup {
+    display: flex;
+    justify-self: center;
     border: solid;
     padding: 20px;
     display: block;
@@ -444,9 +455,8 @@ nav {
     border-color: var(--mainColor);
     background-color: white;
     margin-top: 30vh;
-    max-height: 380px;
-    width: 80vw;                
-    max-width: 650px;
+    max-height: 280px;             
+    max-width: 340px;
     box-sizing: border-box;
 }
 
@@ -959,6 +969,69 @@ nav {
 
 .success-block {
     animation: fadeSlideOut 1.4s ease-in-out 2s forwards;
+}
+
+/* Admin Page */
+
+body.admin-login-page {
+    display: block; /* override global flex */
+}
+
+.admin-login-in-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* horizontal */
+    align-items: center;      /* vertical */
+    min-height: 100vh;        /* full viewport height */
+}
+
+.admin-login-entire-form-holder {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: solid;
+    border-color: var(--mainColor);
+    border-radius: 4px;
+    border-width: 1px;
+    padding: 50px 25px;
+    
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.admin-login-input {
+    font-size: var(--normalFont);
+    border-color: var(--mainColor);
+    border-style: solid;
+    border-radius: 4px;
+    border-width: 1px;
+    padding: 5px;
+    width: 250px;
+    margin-bottom: 10px;
+}
+
+.admin-login-label {
+    color: var(--mainColor);
+}
+
+.admin-login-header {
+    font-size: var(--largeFont);
+    color: var(--mainColor);
+    margin: 0px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.admin-error {
+    color: var(--redColor);
+    font-size: var(--smallFont);
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 @keyframes fadeSlideOut {

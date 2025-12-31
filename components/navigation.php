@@ -14,5 +14,10 @@
             <img class="nav-icon-svg" src="images/icons/staff_management_icon<?php if ($view === 'staffmanagement'){ echo '_selected';} ?>.svg">
             <input hidden type="radio" name="view" id="staffmanagement" value="staffmanagement" onchange="this.form.submit()">
         </label>
+
+        <label class="nav-icon-label" for='logout' data-tip="Logout">
+            <img class="nav-icon-svg" src="images/icons/logout_icon.svg">
+            <input hidden type="radio" name="view" id="logout" value="logout" onchange="this.form.submit()">
+        </label>
     </form>
 </nav>

@@ -1,3 +1,10 @@
+<?php
+if (!defined('APP_RUNNING')) {
+    header("Location: ../index.php");
+    exit;
+}
+?>
+
 <?php    
     // Determine "today"
     $today = time();

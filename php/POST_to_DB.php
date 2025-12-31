@@ -470,4 +470,48 @@
         $stmt->execute();
         header('Location: index.php?view=staffmanagement');
     }
+
+    // Admin Login
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['adminlogin'])) {
+        $username = trim($_POST['username'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+
+        if ($username === '') {
+            $errors['login'] = 'Inputs cannot be empty';
+            $errors['username'] = '1';
+        }
+        
+        if ($password === '') {
+            $errors['login'] = 'Inputs cannot be empty';
+            $errors['password'] = '1';
+        }
+
+        if (empty($errors)) {
+                $conn = connectToDatabase();
+                $stmt = $conn->prepare('SELECT adminID, username, password, mostRecentLogin, userID 
+                                        FROM admin_users 
+                                        WHERE username = :username LIMIT 1');
+                $stmt->bindValue(':username', $username);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$user || !password_verify($password, $user['password'])) {
+                    $errors['login'] = 'Invalid login credentials';
+                } else {
+                    session_start();
+                    $_SESSION['admin']['adminID'] = $user['adminID'];
+                    $_SESSION['admin']['username'] = $user['username'];
+                    $_SESSION['user']['role'] = 'admin';
+
+                    // Update last login
+                    $stmt = $conn->prepare('UPDATE admin_users SET mostRecentLogin = NOW() WHERE adminID = :adminID');
+                    $stmt->bindValue(':adminID', $user['adminID']);
+                    $stmt->execute();
+
+                    // Redirect to dashboard
+                    header('Location: index.php?view=table');
+                    exit;
+                }
+            }
+        }
 ?>
