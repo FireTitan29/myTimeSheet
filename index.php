@@ -15,9 +15,13 @@
     include 'php/validation.php';
     include 'php/POST_to_DB.php';
 
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['name'])) {
 
-        $_SESSION['name'] = $_GET['name'];
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['name'])) {
+        if (in_array($_GET['name'], getAllStaffNames())) {
+            $_SESSION['name'] = $_GET['name'];
+        } else {
+            $_SESSION['name'] = '';
+        }
     }
 
     $view = $_GET['view'] ?? 'stafflogin';
@@ -29,7 +33,7 @@
                     'admin'=>'Admin Login'];
 
     if (!key_exists($view, $pagenames)) $view = 'stafflogin';
-    
+
     $page = $pagenames[$view] ?? $pagenames['stafflogin'];
 
     $person = $_SESSION['name'] ?? '';

@@ -8,7 +8,12 @@
 
     if ($selectedStaffID !== '') {
         $selectedPerson = getStaffMemberDetails($selectedStaffID);
+        if (!$selectedPerson) {
+            $selectedPerson = [];
+            $selectedStaffID = '';
+        } 
     }
+
 ?>
 
 <div class="staffmanagment-holder">

@@ -1,5 +1,15 @@
 <?php
 
+    function get_months_array($format = 'F') {
+        $months = [];
+        for ($m = 1; $m <= 12; $m++) {
+            // mktime(hour, minute, second, month, day, year)
+            $timestamp = mktime(0, 0, 0, $m, 1, date('Y'));
+            $months[$m] = date($format, $timestamp);
+        }
+        return $months;
+    }
+
     function createRow($day, $month, $year, $staffMemberID) {
         $timestamp = mktime(0, 0, 0, $month, $day, $year);
         $date = date("d M", $timestamp);

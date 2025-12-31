@@ -26,7 +26,7 @@
 
     function getStaffMemberDetails($staffID) {
         $pdo = connectToDatabase();
-        $stmt = $pdo->prepare('SELECT * FROM staff WHERE staffID = :id LIMIT 1');
+        $stmt = $pdo->prepare('SELECT * FROM staff WHERE staffID = :id AND active = 1 LIMIT 1');
 
         $stmt->execute([':id' => $staffID]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);

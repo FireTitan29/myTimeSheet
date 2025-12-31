@@ -1,6 +1,5 @@
 
 <?php 
-
     $staff = currentlyInAndOut(); 
     $in = 0;
     $out = 0;
