@@ -136,6 +136,24 @@
         </div>
     <?php endif; ?>
 </td>
+<?php if ($weekDay !== 'Saturday' && $weekDay !== 'Sunday'): ?>
+    <td>
+        <button
+            type="button"
+            class="comment-button"
+            name="addComment"
+            onclick='openLeaveForm(
+                null,
+                "",
+                <?= json_encode($dbDate) ?>
+            )'
+        >
+            🗂️ Record Leave
+        </button>
+    </td>
+    <?php else: ?>
+        <td></td>
+<?php endif;?>
 </tr>
 
 <script>

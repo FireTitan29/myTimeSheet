@@ -1,7 +1,7 @@
 <?php
     session_start();
     define('APP_RUNNING', true); 
-    
+
     header("Cache-Control: no-cache, no-store, must-revalidate");
     header("Pragma: no-cache"); 
     header("Expires: 0"); 
@@ -14,7 +14,7 @@
     include 'php/table_functions.php';
     include 'php/validation.php';
     include 'php/POST_to_DB.php';
-
+    
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['name'])) {
         if (in_array($_GET['name'], getAllStaffNames())) {
@@ -64,7 +64,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Healthy Pet: <?= $page ?></title>
-    <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="mystyle.css?v=3">
     <link rel="icon" type="image/x-icon" href="images/icons/staff_management_icon.svg">
 </head>
 <body <?php if ($view === 'stafflogin') echo 'style="justify-content: center;"'?>>
@@ -84,4 +84,13 @@
         ?>
     </div>
 </body>
+
+<script>
+    document.querySelectorAll('textarea').forEach(el => {
+  el.addEventListener('input', () => {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  });
+});
+</script>
 </html>

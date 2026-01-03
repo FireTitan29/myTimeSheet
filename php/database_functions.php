@@ -9,6 +9,7 @@
         }
     }
 
+
     function closeDatabase(&$pdo) {
         $pdo = null;
     }
@@ -264,26 +265,71 @@
         return $personStats;
     }
 
-    function calculateLeaveDays($staffID) {
+    function calculateAnnualLeaveDays(int $staffID): float {
         $pdo = connectToDatabase();
 
+        /**
+         * Calculate accrued leave
+         * Rule: 1 day leave per 17 worked days
+         * Exclude leave days themselves
+         */
         $stmt = $pdo->prepare(
-            'SELECT ROUND(COUNT(DISTINCT date) / 17, 2) AS leaveAccrued
-            FROM timesheet
-            WHERE staffID = :staffID
-            AND timeIn IS NOT NULL
-            AND date >= MAKEDATE(YEAR(CURDATE()), 1)
-            AND date <= CURDATE()'
+            'SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
+            FROM timesheet t
+            LEFT JOIN staff_leave l
+            ON l.staffID = t.staffID
+            AND l.leave_date = t.date
+            WHERE t.staffID = :staffID
+            AND t.timeIn IS NOT NULL
+            AND l.leaveID IS NULL
+            AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
+            AND t.date <= CURDATE()'
         );
 
         $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
         $stmt->execute();
+        $leaveAccrued = (float) $stmt->fetchColumn();
 
-        $leaveAccrued = $stmt->fetchColumn();
-        closeDatabase($pdo);
-        
+        /**
+         * Cap annual leave accrual
+         */
         $leaveAccrued = min($leaveAccrued, 15);
-        return (float)$leaveAccrued;
+
+
+        /**
+         * Get Starting leave amount
+         */
+
+        $stmt = $pdo->prepare(
+            'SELECT leave_balance
+            FROM staff
+            WHERE staffID = :staffID
+        ');
+
+        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+        $stmt->execute();
+        $leaveBalance = (float) $stmt->fetchColumn();
+
+        /**
+         * Calculate leave already taken
+         */
+        $stmt = $pdo->prepare(
+            'SELECT COALESCE(SUM(leave_amount), 0)
+            FROM staff_leave
+            WHERE staffID = :staffID
+            AND leave_type = \'Annual\''
+        );
+
+        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+        $stmt->execute();
+        $leaveTaken = (float) $stmt->fetchColumn();
+
+        closeDatabase($pdo);
+
+        /**
+         * Remaining leave
+         */
+        return round(($leaveBalance+$leaveAccrued) - $leaveTaken, 2);
     }
 
     function currentlyInAndOut() {
@@ -291,7 +337,7 @@
         $today = date('Y-m-d');
 
         $stmt = $pdo->prepare(
-            'SELECT s.staffID, s.staffName, t.timeIn, t.timeOut
+            'SELECT s.staffID, s.staffName, t.timeIn, t.timeOut, t.staff_comment_early, t.staff_comment_late, t.management_comment
             FROM staff s
             LEFT JOIN timesheet t
             ON t.staffID = s.staffID
@@ -319,5 +365,22 @@
         
         return $staffID;
     }
+
+    // Check whether an IP Address is allowed
+    function isIpAllowed(string $ip): bool {
+        $conn = connectToDatabase();
+        $stmt = $conn->prepare(
+            'SELECT ipID 
+            FROM allowed_ip_addresses 
+            WHERE ipAddress = :ip
+            LIMIT 1'
+        );
+        $stmt->bindValue(':ip', $ip);
+        $stmt->execute();
+
+        return (bool)$stmt->fetchColumn();
+    }
+
+
 
 ?>

@@ -102,7 +102,9 @@ if (!defined('APP_RUNNING')) {
         <th>Time Out</th>
         <th class="comments">Management Comments</th>
         <th class="comments">Staff Comments</th>
+        <th>Leave</th>
     </tr>
     <?php fillTable($month, $year, $person);?>
 </table>
 <?php include 'components/commentPopUp.php'; ?>
+<?php include 'components/leavePopUp.php'; ?>

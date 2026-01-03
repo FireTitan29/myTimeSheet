@@ -192,6 +192,7 @@
 
             header('Location: index.php?success=0');
         }
+        unset($_SESSION['admin']);
         closeDatabase($pdo);
         exit;
     }
@@ -244,20 +245,28 @@
         $_SESSION['clock']['type'] = 'out';
         $_SESSION['clock']['staff_id'] = $staffMemberID;
         header('Location: index.php?success=1');
+        unset($_SESSION['admin']);
         closeDatabase($pdo);
         exit;
     }
 
     // Clock in/out Process from STAFF PIN Page
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clockInClockOut'])) {
-        $pin = trim($_POST['pin'] ?? '');
 
+        // ! Potential bug
+        unset($_SESSION['admin']);
+
+        $pin = trim($_POST['pin'] ?? '');
+        $ip = $_SERVER['REMOTE_ADDR'];
         $nowTs    = time();
         $cutoffTs = strtotime('today 07:30');
         $finishTs = strtotime('today 17:00');
 
         if ($pin === '') {
             $errors['pin'] = 'Cannot be Empty';
+        
+        } elseif (!isIpAllowed($ip)){
+            $errors['pin'] = 'Access denied, please connect to Healthy Pet WIFI';
         } else {
             $staffID = checkStaffPin($pin);
 

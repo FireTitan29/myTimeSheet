@@ -240,27 +240,34 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
 
 .popUpForm {
     position: fixed;
-    justify-content: center;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     display: none;
+    justify-content: center;
+    align-items: center;
     background-color: rgba(14, 20, 40, 0.4);
+    z-index: 1000;
 }
 
 .popUpForm-Comment-div {
-    margin-top: 30vh;
     background-color: white;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
-    padding-bottom: 5px;
 
-    border: solid;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 20px 20px 10px;
+
+    border: 2px solid var(--mainColor);
     border-radius: 5px;
-    border-color: var(--mainColor);
+
+    width: min(520px, 90vw);
+    box-sizing: border-box;
+
+    height: auto;        /* ✅ dynamic */
+    max-height: 90vh;    /* ✅ safety on small screens */
 }
 
 
@@ -268,7 +275,7 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     font-size: var(--largeFont);
     color: var(--mainColor);
     font-weight: bold;
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
 .commentTextArea {
@@ -276,7 +283,7 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     margin-top: 10px;
     margin-left: 20px;
     margin-right: 20px;
-    min-width: 350px;
+    min-width: 0;   /* CRITICAL */
     min-height: 200px;
     resize: none;
     margin-bottom: 5px;
@@ -344,6 +351,7 @@ nav {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 12px;
     margin-right: 25px;
     position: fixed;
+    z-index: 800;
 }
 
 .nav-form {
@@ -362,6 +370,7 @@ nav {
     padding-bottom: 8px;
     padding-left: 20px;
     padding-right: 20px;
+
 }
 
 .nav-icon-label:hover {
@@ -397,7 +406,7 @@ nav {
 
     opacity: 0;
     pointer-events: none;
-    z-index: 50;
+
     transition: opacity 0.1s linear;
 }
 
@@ -454,7 +463,6 @@ nav {
     border-radius: 5px;
     border-color: var(--mainColor);
     background-color: white;
-    margin-top: 30vh;
     max-height: 280px;             
     max-width: 340px;
     box-sizing: border-box;
@@ -549,6 +557,7 @@ nav {
     padding: 8px;
     color: white;
     border-radius: 100%;
+    z-index: 1;
 }
 
 .form-button-circle:hover, .staff-info-button:hover {
@@ -930,6 +939,10 @@ nav {
 
 .textReason {
     width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+    padding: 10px;
+    resize: vertical;
 }
 
 .clock-in-late {
@@ -1032,6 +1045,101 @@ body.admin-login-page {
     font-size: var(--smallFont);
     text-align: center;
     margin-bottom: 10px;
+}
+
+.block-holder-wide {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 20px;
+    border: 2px solid var(--mainColor);
+    border-radius: 5px;
+    background-color: white;
+
+    max-width: 670px;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.popUp-logout {
+    z-index: 999;
+    height: 140px;
+    width: 325px;
+}
+
+.popUp-logout h3 {
+    text-align: center;
+    font-size: var(--mediumFont);
+    color: var(--mainColor);
+}
+
+.dashboard-popup {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    top: -10px;   
+    left: 250px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border: 1px solid var(--mainColor);
+    border-radius: 5px;
+    width: 220px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: var(--smallFont);
+    z-index: 200; 
+    display: block;        
+}
+
+.in-out-person.in-person:hover .dashboard-popup {
+    opacity: 1;
+}
+
+.in-out-person.in-person {
+    position: relative;
+    cursor: pointer;
+}
+
+.dashboard-popup h4 {
+    color: var(--mainColor);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: var(--smallFont);
+}
+
+.dashboard-popup p {
+    margin: 0px;
+    font-size: var(--smallFont);
+}
+
+.dashboard-popup div {
+    margin-bottom: 20px;
+}
+
+.leaveTextArea {
+    min-height: 80px;
+    margin-bottom: 10px;
+}
+
+.smallerheading {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 0px;
+    font-size: var(--normalFont);
+}
+
+.leave-radio-holder {
+    padding: 0px;
+    margin: 0px;
+    margin-left: 20px;
+}
+
+.leave-popup-div {
+    /* height: 340px; */
+     width: min(350px, 80vw);
 }
 
 @keyframes fadeSlideOut {

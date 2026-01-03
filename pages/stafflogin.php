@@ -70,7 +70,7 @@ if (!defined('APP_RUNNING')) {
 
 <?php if (isset($errors['late'])): ?>
     <div class="popUpForm" style="display: flex;" id="addStaff-form">
-        <div class="block-holder-popup reasonPopup" >
+        <div class="block-holder-wide reasonPopup" >
             <div>
                 <h3 class="block-header">Hi <?php if (isset($errors['late'])) echo $errors['late']?> 👋</h3>
                 <span class="clock-in-late"><?php if (isset($errors['offence'])) {

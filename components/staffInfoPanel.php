@@ -46,7 +46,7 @@
         </div>
         <br>
         <p class="contact-p"><span class="highlight-span">Average Arival Time:</span><span class="dark-color"> <?= $personStats['avgTimeIn'] ?></span></p>
-        <p class="contact-p"><span class="highlight-span">Leave accrued (YTD):</span><span class="dark-color"> <?= calculateLeaveDays($selectedPerson['staffID']) ?></span></p>
+        <p class="contact-p"><span class="highlight-span">Annual Leave accrued (YTD):</span><span class="dark-color"> <?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?></span></p>
         <p>Leave Section coming soon</p>
     </div>
 </div>

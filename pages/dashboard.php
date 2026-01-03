@@ -13,7 +13,6 @@ if (!defined('APP_RUNNING')) {
     $pendingClockOut = 0;
 ?>
 
-<!-- <div style="margin-top: 5px;"></div> -->
 <div class="entire-block-dashboard">
     <div style="margin-bottom:20px;">
         <h3 class="block-header">Dashboard</h3>
@@ -24,7 +23,8 @@ if (!defined('APP_RUNNING')) {
                 <?php foreach ($staff as $person): ?>
                     <?php if ($person['timeIn'] && !$person['timeOut']) $pendingClockOut++; ?>
                     <?php if (!$person['timeOut'] && $person['timeIn']): ?>
-                    <label class="in-out-person in-person">
+                        <label class="in-out-person in-person">
+                        <?php include 'components/dashboardPopUp.php'; ?>
                         <?= $person['staffName'] ?><br>
                         <span class="timein-dashboard">Clocked In: <?= date('H:i', strtotime($person['timeIn'])); ?></span>
                         <?php 
@@ -54,6 +54,7 @@ if (!defined('APP_RUNNING')) {
                         </label>
                     <?php elseif ($person['timeOut'] && $person['timeIn']): ?>
                         <label class="in-out-person in-person">
+                            <?php include 'components/dashboardPopUp.php'; ?>
                             <?= $person['staffName'] ?><br>
                             <span class="timein-dashboard">Clocked Out: <?= date('H:i', strtotime($person['timeOut'])); ?></span>
                             <?php $out++; ?>
