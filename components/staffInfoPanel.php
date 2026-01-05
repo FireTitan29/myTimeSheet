@@ -22,6 +22,7 @@
             <div class="staff-info-contact-div">
                 <p class="contact-p"><span class="highlight-span">Email:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['email']; ?></p>
                 <p class="contact-p"><span class="highlight-span">Phone:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['phone']; ?></p>
+                <p class="contact-p"><span class="highlight-span">PIN:</span> <?php if (!empty($selectedPerson)) echo $selectedPerson['pin']; ?></p>
             </div>
         </div>
 

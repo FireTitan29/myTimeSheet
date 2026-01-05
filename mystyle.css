@@ -1142,6 +1142,10 @@ body.admin-login-page {
      width: min(350px, 80vw);
 }
 
+.return-link-anchor {
+    color: var(--mainColor);
+}
+
 @keyframes fadeSlideOut {
     from {
         opacity: 1;

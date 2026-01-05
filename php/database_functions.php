@@ -1,12 +1,20 @@
 <?php 
     function connectToDatabase() {
+        $database = require __DIR__ . '/../../config/database.php';
+        $host = $database['host'];
+        $db   = $database['dbname'];
+        $user = $database['user'];
+        $pass = $database['pass'];
         try {
-            $pdo = new PDO('mysql:host=localhost;dbname=HealthyPet', 'root', '', [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+            $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
             return $pdo;
-        } catch (PDOException $error) {
-            die("Connection to the DB failed, here's why: " . $error->getMessage());
+        } catch (PDOException $e) {
+            die("Connection failed: " . $e->getMessage());
         }
+    
     }
 
 

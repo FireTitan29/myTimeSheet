@@ -311,7 +311,7 @@
                     // Clocking out before scheduled end time (before 17:30)
                     } else {
                         $errors['late'] = getStaffMemberDetails($staffID)['staffName'];
-                        $errors['offence'] = "You're clocking out <i><strong>before</strong></i> your scheduled end time (17:30). Please add a short note for your manager.";
+                        $errors['offence'] = "You're clocking out <i><strong>before</strong></i> your scheduled end time (17:00). Please add a short note for your manager.";
                         $errors['earlyLate'] = 'early';
                     }
                 }

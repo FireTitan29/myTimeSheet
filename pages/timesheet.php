@@ -64,6 +64,18 @@ if (!defined('APP_RUNNING')) {
 ?>
 <?php if ($role === 'admin'): ?>
 <form method="GET">
+    <!-- Fixes bug when user is selected, the month & year changes back to Latest instead of selected month -->
+    <input type="hidden" name="month" value="<?=
+        isset($_GET['month'])
+            ? htmlspecialchars($_GET['month'])
+            : htmlspecialchars($monthNameStr)
+    ?>">
+
+    <input type="hidden" name="year" value="<?=
+        isset($_GET['year'])
+            ? (int)$_GET['year']
+            : (int)$year
+    ?>">
     <label for="name"> Select Staff Member<br>
     <input type="hidden" name="view" value="table">
         <select class="optionBox-person" name="name" id="name" onchange="this.form.submit()">

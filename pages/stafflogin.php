@@ -13,58 +13,62 @@ if (!defined('APP_RUNNING')) {
 <?php if (!isset($errors['late'])): ?>
     <div class="clock-in-body">
     <?php include 'components/successMessage.php'; ?>
-    <form action="" method="POST" class="clock-in-form" id="clockInForm">
-        <input type="hidden" name="clockInClockOut" value="1">
-        <span class="error" id='error-pin'><?php if (isset($errors['pin'])) echo $errors['pin']; ?></span>
-        <label for="" class="clock-in-tool-pin">Enter your pin</label>
-            <div class="pin-input-row" aria-label="4 digit PIN">
-                <input
-                    type="text"
-                    class="form-text-input-name pin-input"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
-                    maxlength="1"
-                    autocomplete="one-time-code"
-                    aria-label="PIN digit 1"
-                    name="pin1"
-                    id="pin1"
-                >
-                <input
-                    type="text"
-                    class="form-text-input-name pin-input"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
-                    maxlength="1"
-                    aria-label="PIN digit 2"
-                    name="pin2"
-                    id="pin2"
-                >
-                <input
-                    type="text"
-                    class="form-text-input-name pin-input"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
-                    maxlength="1"
-                    aria-label="PIN digit 3"
-                    name="pin3"
-                    id="pin3"
-                >
-                <input
-                    type="text"
-                    class="form-text-input-name pin-input"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
-                    maxlength="1"
-                    aria-label="PIN digit 4"
-                    name="pin4"
-                    id="pin4"
-                >
+    <?php if (!isset($_GET['success'])): ?>
+        <form action="" method="POST" class="clock-in-form" id="clockInForm">
+            <input type="hidden" name="clockInClockOut" value="1">
+            <span class="error" id='error-pin'><?php if (isset($errors['pin'])) echo $errors['pin']; ?></span>
+            <label for="" class="clock-in-tool-pin">Enter your pin</label>
+                <div class="pin-input-row" aria-label="4 digit PIN">
+                    <input
+                        type="text"
+                        class="form-text-input-name pin-input"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        maxlength="1"
+                        autocomplete="one-time-code"
+                        aria-label="PIN digit 1"
+                        name="pin1"
+                        id="pin1"
+                    >
+                    <input
+                        type="text"
+                        class="form-text-input-name pin-input"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        maxlength="1"
+                        aria-label="PIN digit 2"
+                        name="pin2"
+                        id="pin2"
+                    >
+                    <input
+                        type="text"
+                        class="form-text-input-name pin-input"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        maxlength="1"
+                        aria-label="PIN digit 3"
+                        name="pin3"
+                        id="pin3"
+                    >
+                    <input
+                        type="text"
+                        class="form-text-input-name pin-input"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        maxlength="1"
+                        aria-label="PIN digit 4"
+                        name="pin4"
+                        id="pin4"
+                    >
 
-                <!-- Combined pin posted to PHP -->
-                <input type="hidden" name="pin" id="pin">
-            </div>
-        <button type="submit" id="hiddenSubmit" style="display:none;">Submit</button>
-    </form>
+                    <!-- Combined pin posted to PHP -->
+                    <input type="hidden" name="pin" id="pin">
+                </div>
+            <button type="submit" id="hiddenSubmit" style="display:none;">Submit</button>
+        </form>
+    <?php else: ?>
+        <a class="return-link-anchor" href="index.php?view=stafflogin">Back to PIN Entry</a>
+    <?php endif; ?>
 </div>
 <?php endif;?>
 
