@@ -60,10 +60,10 @@ if (!defined('APP_RUNNING')) {
     $selectedMonth = (int)$month;
     $selectedYear  = (int)$year;
 
-
 ?>
 <?php if ($role === 'admin'): ?>
 <form method="GET">
+    <input type="hidden" name="view" value="table">
     <!-- Fixes bug when user is selected, the month & year changes back to Latest instead of selected month -->
     <input type="hidden" name="month" value="<?=
         isset($_GET['month'])
@@ -77,7 +77,7 @@ if (!defined('APP_RUNNING')) {
             : (int)$year
     ?>">
     <label for="name"> Select Staff Member<br>
-    <input type="hidden" name="view" value="table">
+
         <select class="optionBox-person" name="name" id="name" onchange="this.form.submit()">
             <option hidden default <?php if (!isset($person)) {echo "selected";}?>><?php if ($person) {echo $person;} else {echo 'None';}?></option>
             <?php foreach (getAllStaffNames() AS $name):?>
@@ -120,3 +120,4 @@ if (!defined('APP_RUNNING')) {
 </table>
 <?php include 'components/commentPopUp.php'; ?>
 <?php include 'components/leavePopUp.php'; ?>
+<?php include 'components/leaveDetailsPopUp.php'; ?>

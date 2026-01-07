@@ -10,7 +10,7 @@
         return $months;
     }
 
-    function createRow($day, $month, $year, $staffMemberID) {
+    function createRow($day, $month, $year, $staffMemberID, $periodPublicHolidays) {
         $timestamp = mktime(0, 0, 0, $month, $day, $year);
         $date = date("d M", $timestamp);
         $weekDay = date("l", $timestamp);
@@ -28,6 +28,24 @@
             
             $isLate = $timeIn > $cutoff;
         }
+
+        $isPublicHoliday = in_array(
+            $dbDate,
+            array_column($periodPublicHolidays, 'holiday_date'),
+            true
+        );
+
+        $publicHolidayName = null;
+
+        foreach ($periodPublicHolidays as $holiday) {
+            if ($holiday['holiday_date'] === $dbDate) {
+                $publicHolidayName = $holiday['name'];
+                break;
+            }
+        }
+
+        // var_dump($publicHolidayName);
+
         include 'components/dateRow.php';
     }
 

@@ -19,6 +19,7 @@ textarea:focus {
 
  --grayColor: rgb(229, 229, 229);
  --darkGrayColor: rgb(180, 180, 180);
+ --extraDarkGrayColor: rgb(117, 117, 117);
  --lightGrayColor: #f2f2f2;
 
  --redColor: rgb(239, 35, 60);
@@ -98,6 +99,37 @@ td, th {
     border-bottom: none;
 }
 
+
+/* Only rows that can expand */
+tr[data-has-expand="1"] td:first-child {
+    position: relative;
+    /* padding-left: 20px; */
+}
+
+/* Arrow */
+tr[data-has-expand="1"] td:first-child::after {
+    content: '▸';
+    position: absolute;
+    left: 15px;                 /* tight to left edge */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75em;
+    color: #888;
+    transition: transform 0.2s ease, color 0.2s ease;
+    pointer-events: none;
+}
+
+tr[data-has-expand="1"]:hover td:first-child::after {
+    color: var(--mainColor);
+}
+
+/* Expanded state */
+tr[data-has-expand="1"].row-open td:first-child::after {
+    transform: translateY(-50%) rotate(90deg);
+    color: #333;
+}
+
+
 td:first-child,
 th:first-child {
     border-left: none;
@@ -108,11 +140,11 @@ th:last-child {
     border-right: none;
 }
 
-tr:not(.isLate):not(.today):not(.weekDay):nth-child(even) {
+tr:not(.isLate):not(.today):not(.weekDay):not(.leaveDay):nth-child(even) {
   background-color: #f7f7f7;
 }
 
-tr:not(.isLate):not(.today):not(.weekDay):nth-child(odd) {
+tr:not(.isLate):not(.today):not(.weekDay):not(.leaveDay):nth-child(odd) {
   background-color: #ffffff;
 }
 
@@ -120,11 +152,64 @@ tr:not(.isLate):not(.today):not(.weekDay):nth-child(odd) {
     background-color: var(--grayColor);
 }
 
+/* .leaveDay {
+    background-color: var(--grayColor);
+} */
 
 tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
-    background-color: var(--lightColor);
+    /* background-color: var(--lightColor); */
     box-shadow: inset 4px 0 0 var(--mainColor);
 }
+
+tr[data-has-expand="1"] td {
+    cursor: pointer;
+    /* transition: background-color 0.15s ease; */
+}
+
+/* tr[data-has-expand="1"]:hover td {
+    background-color: var(--lightGrayColor);
+} */
+
+.publicHoliday-td {
+
+    cursor: help;
+    position: relative;
+}
+
+.publicHoliday-td:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    background-color: var(--extraDarkColor);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    
+    font-size: 0.75em;
+    font-weight: normal;
+    
+    opacity: 1;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.publicHoliday-td:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    border-width: 6px;
+    border-style: solid;
+    border-color: #1f2937 transparent transparent transparent;
+}
+
+
 
 .today {
     background-color: var(--lightColor);
@@ -266,8 +351,8 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     width: min(520px, 90vw);
     box-sizing: border-box;
 
-    height: auto;        /* ✅ dynamic */
-    max-height: 90vh;    /* ✅ safety on small screens */
+    height: auto;    
+    max-height: 90vh;
 }
 
 
@@ -283,7 +368,7 @@ tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
     margin-top: 10px;
     margin-left: 20px;
     margin-right: 20px;
-    min-width: 0;   /* CRITICAL */
+    min-width: 0; 
     min-height: 200px;
     resize: none;
     margin-bottom: 5px;
@@ -987,7 +1072,7 @@ nav {
 /* Admin Page */
 
 body.admin-login-page {
-    display: block; /* override global flex */
+    display: block;
 }
 
 .admin-login-in-body {
@@ -1121,7 +1206,9 @@ body.admin-login-page {
 
 .leaveTextArea {
     min-height: 80px;
+    width: 100%;
     margin-bottom: 10px;
+    margin-left: 0px;
 }
 
 .smallerheading {
@@ -1134,17 +1221,244 @@ body.admin-login-page {
 .leave-radio-holder {
     padding: 0px;
     margin: 0px;
-    margin-left: 20px;
+    margin-bottom: 15px;
 }
 
 .leave-popup-div {
     /* height: 340px; */
-     width: min(350px, 80vw);
+     width: min(450px, 80vw);
+}
+
+.doctor-radio-holder {
+    margin-right: 10px;
+    padding: 0;
+    width: auto;
+    border-radius: 3px;
+    border: none;
+    background: transparent;
+}
+
+/* hide radio */
+.doctor-radio-holder input {
+    display: none;
+}
+
+/* span is the button */
+.doctor-radio-holder span {
+    display: block;
+    padding: 4px 0;
+    min-width: 45px;
+    text-align: center;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--extraDarkGrayColor);
+    background-color: white;
+    color: var(--extraDarkGrayColor);
+}
+
+/* hover */
+.doctor-radio-holder:hover span {
+    background-color: var(--mainColor);
+    border-color: var(--mainColor);
+    color: white;
+    cursor: pointer;
+}
+
+.doctor-radio-holder input[type="radio"]:checked + span {
+    background-color: var(--mainColor);
+    color: white;
+    /* font-weight: bold; */
+    border-color: var(--mainColor);
+}
+
+.doctorsNote-Holder {
+    margin-top: 15px;
+}
+.doctorsNoteHeading {
+    margin-top: 0px;
 }
 
 .return-link-anchor {
     color: var(--mainColor);
 }
+
+.dateHeadingPopUp {
+    font-size: var(--smallFont);
+    margin-top: 0px;
+    font-weight: normal; 
+    color: var(--extraDarkGrayColor);
+}
+
+.numberOfDaysLeaveInput {
+    width: 45px;
+}
+
+.leave-date-start,
+.leave-date-end {
+    margin-top: 4px;
+    line-height: 1.3;
+}
+
+.leave-radio-holder {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.day-type-toggle {
+    display: inline-flex;
+    border: 1px solid var(--extraDarkGrayColor);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.day-type-toggle label {
+    cursor: pointer;
+}
+
+.day-type-toggle span {
+    padding: 8px 14px;
+    display: block;
+    background: #f9fafb;
+    color: #374151;
+}
+
+.day-type-toggle input {
+    display: none;
+}
+
+.day-type-toggle input:checked + span {
+    background: var(--lightColor);
+    color: var(--mainColor);
+    font-weight: 600;
+}
+
+.leave-error {
+    color: var(--darkColor);
+}
+
+.leave-personheading {
+    font-size: var(--mediumFont);
+    color: var(--darkColor);
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+.popupDetails-subheading {
+    color: var(--mainColor);
+    font-weight: bold;
+}
+
+.popupDetails-p {
+    margin: 0;
+}
+
+.leave-p-color {
+    color: var(--mainColor);
+    
+}
+
+.leave-dates {
+    margin-top: 18px;
+}
+
+.leave-date-range {
+    line-height: 1.4;
+    font-size: var(--normalFont);
+    font-weight: 600;
+    color: var(--darkColor);
+}
+
+.leave-duration {
+    font-size: 14px;
+    color: var(--extraDarkGrayColor);
+    margin-top: 8px;
+}
+
+.leave-comment-block {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.leave-comment-label {
+    letter-spacing: 0.04em;
+    
+    font-size: var(--normalFont);
+    color: var(--mainColor);
+    font-weight: bold;
+}
+
+.leave-comment-text {
+    line-height: 1.55;
+    max-width: 520px;
+    font-size: var(--normalFont);
+    line-height: 1.4;
+    white-space: pre-wrap; /* important for multi-line comments */
+}
+
+/* TEST */
+.leave-badges {
+    margin-top: 14px;
+    margin-bottom: 18px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.badge-family {
+    background: var(--lightColor);
+    color: var(--mainColor);
+}
+
+.badge-annual {
+    background: #e6f4ea;   /* soft green tint */
+    color: #1f7a3f;        /* muted green */
+}
+
+.badge-sick {
+    background: #fdecea;   /* light rose */
+    color: #b42318;        /* deep muted red */
+}
+
+.badge-unpaid {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.badge-halfday {
+    background: #fff7ed;   /* soft amber */
+    color: #9a3412;        /* warm brown */
+}
+
+
+.popUpForm-Comment-div, .block-holder-popup {
+    animation: fadeInScale 0.15s ease-out;
+}
+
+.extraspaceforbuttons {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 
 @keyframes fadeSlideOut {
     from {

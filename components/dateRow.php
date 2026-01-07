@@ -1,16 +1,39 @@
-<?php $person = $_SESSION['name'] ?? ''; ?>
+<?php 
+    $person = $_SESSION['name'] ?? ''; 
+?>
+<tr
+    data-has-expand="<?php
+        echo (!empty($staffRecord['staff_comment_late'])
+            || !empty($staffRecord['staff_comment_early'])
+            || !empty($staffRecord['management_comment'])
+            || !empty($staffRecord['leave_id']))
+            ? '1'
+            : '0';
+    ?>"
+    onclick="toggleRow(event, this)"
 
-<tr <?php if ($weekDay == 'Saturday' || $weekDay == 'Sunday') { 
-        echo "class = 'weekDay'";
-    } else if ($calendarDate === $todayDate) {
-        echo "class = 'today'";
-    }?>>
+    <?php 
+        if ($weekDay == 'Saturday' || $weekDay == 'Sunday' || $isPublicHoliday) { 
+            echo "class='weekDay expandable-row'";
+        } else if ($calendarDate === $todayDate) {
+            echo "class='today expandable-row'";
+        } else {
+            echo "class='expandable-row'";
+        } 
+    ?>
+>
     <!-- Date -->
-<td> <?php echo $date?> </td>
+<td> 
+    <?= $date ?>
+</td>
     <!-- Day of Week -->
-<td> <?php echo $weekDay?> </td>
-<!-- Time in -->
- 
+<td data-tip="<?php if ($isPublicHoliday) echo $publicHolidayName ?>" class="<?php if ($isPublicHoliday) echo 'publicHoliday-td' ?>"><?php if ($isPublicHoliday){
+        echo "Public Holiday";
+    } else {
+        echo $weekDay;
+} ?> </td>
+    <!-- Time in -->
+
 <td <?php if ($isLate) {echo "class='isLate'";} ?>>
     <?php if (isset($staffRecord['timeIn'])): ?>
         <?php echo date('H:i:s', strtotime($staffRecord['timeIn'])); ?>
@@ -42,6 +65,12 @@
     $isManager = in_array($role, ['admin', 'management'], true);
     $hasRecord = !empty($staffRecord);                          // row exists?
     $hasComment = $hasRecord && !empty($staffRecord['management_comment']);
+
+    $leaveRecord = null;
+
+    if (!empty($staffRecord) && !empty($staffRecord['is_leave']) && !empty($staffRecord['leave_id'])) {
+        $leaveRecord = getLeaveDetails($staffRecord['leave_id']);
+    }
 ?>
 
 <?php if ($hasRecord && $person !== ''): ?>
@@ -62,7 +91,7 @@
     <?php elseif ($isManager && $person !== ''): ?>
         <!-- Record exists and (maybe) comment exists -> label to edit/view -->
         <label id="managment-comment-closed-<?php if (isset($staffRecord['recordID'])) echo $staffRecord['recordID']; ?>" data-tip="Edit comment"
-            class="commentLabel"
+            class="commentLabel row-preview"
             onclick='openForm(
                 <?= (int)$staffRecord["recordID"] ?>,
                 <?= json_encode($staffRecord["management_comment"] ?? "") ?>,
@@ -114,12 +143,13 @@
 </td>
     <!-- Staff Comment -->
     <td class="staff-comments">
-    <?php if (!empty($staffRecord['staff_comment_late']) || !empty($staffRecord['staff_comment_early']) || !empty($staffRecord['management_comment'])): ?>
-        <button class="toggle-comments" onclick="toggleComments(this, <?= $staffRecord['recordID'] ?>)">
+    <?php if (!empty($staffRecord['staff_comment_late']) || !empty($staffRecord['staff_comment_early'])): ?>
+        <button class="toggle-comments row-preview">
             View comments
         </button>
-
+        
         <div class="comments-content" style="display:none;">
+        <span style="display: block;margin-top: 10px;"></span>
             <?php if (!empty($staffRecord['staff_comment_late'])): ?>
                 <div class="comment-block">
                     <span class="reason-table-heading">Arrived Late - Reason</span>
@@ -135,13 +165,13 @@
             <?php endif; ?>
         </div>
     <?php endif; ?>
-</td>
-<?php if ($weekDay !== 'Saturday' && $weekDay !== 'Sunday'): ?>
-    <td>
+</td>    
+<td>
+<?php if ($weekDay !== 'Saturday' && $weekDay !== 'Sunday' && $person !== '' && (!isset($staffRecord['is_leave']) || $staffRecord['is_leave'] === 0) && !$isPublicHoliday): ?>
         <button
             type="button"
             class="comment-button"
-            name="addComment"
+            name="recordLeave"
             onclick='openLeaveForm(
                 null,
                 "",
@@ -150,22 +180,100 @@
         >
             🗂️ Record Leave
         </button>
-    </td>
+    <?php elseif(isset($staffRecord['is_leave']) && $staffRecord['is_leave'] === 1): ?>
+    <?php 
+        $leaveStart = getLeaveStartDate($staffRecord["staffID"], $staffRecord["leave_id"]) ?? '';
+        $leaveEnd   = getLeaveEndDate($staffRecord["staffID"], $staffRecord["leave_id"]) ?? '';
+     ?>
+    <button
+        class="toggle-comments row-preview leave-preview"
+        onclick='openLeaveDetailsPopUp(
+            <?= (int)$leaveRecord["leave_id"] ?>,
+            <?= json_encode($person) ?>,
+            <?= json_encode($leaveRecord["leave_type"]) ?>,
+            <?= json_encode(ucwords($leaveRecord["day_type"])) ?>,
+            <?= json_encode($leaveStart) ?>,
+            <?= json_encode($leaveEnd) ?>,
+            <?= (int)$leaveRecord["duration_days"] ?>,
+            <?= (int)$leaveRecord["doctors_note_received"] ?>,
+            <?= json_encode($leaveRecord["leave_comment"]) ?>
+        )'
+    >
+        <?= isset($staffRecord["leave_id"]) ? ucwords($leaveRecord["leave_type"]) : "" ?>
+        Leave
+    </button>
+
+        <div class="comments-content" style="display:none;">
+
+            <!-- Adding some margin here -->
+            <span style="display: block;margin-top: 10px;"></span>
+
+            <?php if (!empty($leaveRecord['leave_type'])): ?>
+                <div class="comment-block">
+                    <span class="reason-table-heading">Leave Type</span>
+                    <p class="reason-table-text"><?= ucwords($leaveRecord['leave_type'])?></p>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($leaveRecord['day_type'])): ?>
+                <div class="comment-block">
+                    <span class="reason-table-heading">Day Type</span>
+                    <p class="reason-table-text"><?= ucwords($leaveRecord['day_type'])?> Day</p>
+                </div>
+            <?php endif; ?>
+
+            <!-- <?php if ($leaveRecord['doctors_note_received'] !== 0): ?>
+                <div class="comment-block">
+                    <span class="reason-table-heading">Doctors Note</span>
+                    <p class="reason-table-text"><?= $leaveRecord['doctors_note_received'] === 1 ? "Yes" : "No" ?></p>
+                </div>
+            <?php endif; ?> -->
+
+            <?php if (!empty($leaveRecord['leave_comment'])): ?>
+                <div class="comment-block">
+                    <span class="reason-table-heading">Comment</span>
+                    <p class="reason-table-text"><?= htmlspecialchars($leaveRecord['leave_comment']) ?></p>
+                </div>
+            <?php endif; ?>
+        </div>
     <?php else: ?>
-        <td></td>
+
 <?php endif;?>
+</td>
 </tr>
 
 <script>
-function toggleComments(button, recordID) {
-    const content = button.nextElementSibling;
-    const isOpen = content.style.display === 'block';
-    const managementCommentClosed = document.getElementById(`managment-comment-closed-${recordID}`);
-    const managementCommentOpen = document.getElementById(`managment-comment-open-${recordID}`);
-    content.style.display = isOpen ? 'none' : 'block';
-    managementCommentClosed.style.display = isOpen ? 'block' : 'none';
+function toggleRow(event, row) {
+    // Do not toggle row when clicking interactive elements,
+    // EXCEPT for "View comments" preview buttons
+    if (
+        event.target.closest('.commentLabel') ||
+        event.target.closest('.leave-preview') ||
+        (event.target.closest('button') && !event.target.closest('.toggle-comments'))
+    ) {
+        return;
+    }
 
-    managementCommentOpen.style.display = isOpen ? 'none' : 'block';
-    button.textContent = isOpen ? 'View comments' : 'Hide comments';
+    if (row.dataset.hasExpand !== '1') {
+        return;
+    }
+
+    const isOpen = row.classList.contains('row-open');
+
+    // Expanded content blocks
+    const contentBlocks = row.querySelectorAll('.comments-content, .comment-block');
+
+    // Collapsed preview elements (titles, truncated text, view buttons)
+    const previewBlocks = row.querySelectorAll('.row-preview');
+
+    contentBlocks.forEach(block => {
+        block.style.display = isOpen ? 'none' : 'block';
+    });
+
+    previewBlocks.forEach(el => {
+        el.style.display = isOpen ? '' : 'none';
+    });
+
+    row.classList.toggle('row-open', !isOpen);
 }
 </script>
