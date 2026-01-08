@@ -11,32 +11,37 @@ textarea:focus {
 }
 
 :root { 
- --mainColor: rgb(1, 151, 246);
- --darkColor: rgb(6, 93, 152);
- --extraDarkColor: rgb(10, 34, 57);
+    --mainColor: rgb(1, 151, 246);
+    --darkColor: rgb(6, 93, 152);
+    --extraDarkColor: rgb(10, 34, 57);
 
- --lightColor: rgb(194, 231, 255);
+    --lightColor: rgb(194, 231, 255);
+    --extraLightColor: rgb(230, 245, 255);
+    --grayColor: rgb(229, 229, 229);
+    --darkGrayColor: rgb(180, 180, 180);
+    --extraDarkGrayColor: rgb(117, 117, 117);
+    --lightGrayColor: #f2f2f2;
 
- --grayColor: rgb(229, 229, 229);
- --darkGrayColor: rgb(180, 180, 180);
- --extraDarkGrayColor: rgb(117, 117, 117);
- --lightGrayColor: #f2f2f2;
+    --redColor: rgb(239, 35, 60);
+    --lightRedColor: rgb(255, 199, 206);
+    --darkRedColor: rgb(190, 35, 60);
+    --extraLightRedColor: rgb(255, 224, 229);
 
- --redColor: rgb(239, 35, 60);
- --lightRedColor: rgb(255, 199, 206);
- --darkRedColor: rgb(190, 35, 60);
+    --lightAmber: #fff4e5;      /* very soft amber background */
+    --amber: #9a4d00;   /* warm brown-orange text */
 
- --extraLargeFont: 1.75rem;
- --largeFont: 1.25rem;
- --mediumFont: 1.1rem;
- --normalFont: 1rem;
- --smallFont: 0.8rem;
+    --extraLargeFont: 1.75rem;
+    --largeFont: 1.25rem;
+    --mediumFont: 1.1rem;
+    --normalFont: 1rem;
+    --smallFont: 0.8rem;
 }
 
 * {
     font-family: Nunito Sans;
     font-size: var(--normalFont);
 }
+
 
 body {
     padding: 0;
@@ -800,8 +805,10 @@ nav {
     max-width: 400px;
 }
 
+
+
 .highlight-span {
-    color: var(--mainColor);
+    color: var(--darkColor);
     font-weight: bold;
 }
 
@@ -850,7 +857,7 @@ nav {
     font-size: var(--largeFont);
     color: var(--mainColor);
     margin-top: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .staff-input {
@@ -871,6 +878,12 @@ nav {
 
 .dark-color {
     color: var(--darkColor);
+}
+
+.info-panel-heading {
+    font-size: var(--largeFont);
+    font-weight: bold;
+    color: var(--mainColor);
 }
 
 /* Dashboard */
@@ -1422,10 +1435,14 @@ body.admin-login-page {
     white-space: pre-wrap; /* important for multi-line comments */
 }
 
-/* TEST */
 .leave-badges {
     margin-top: 14px;
     margin-bottom: 18px;
+}
+
+.punctuality-badges {
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .badge {
@@ -1437,7 +1454,7 @@ body.admin-login-page {
 }
 
 .badge-family {
-    background: var(--lightColor);
+    background: var(--extraLightColor);
     color: var(--mainColor);
 }
 
@@ -1446,9 +1463,19 @@ body.admin-login-page {
     color: #1f7a3f;        /* muted green */
 }
 
+.badge-good {
+    background: #e6f4ea;   /* soft green tint */
+    color: #1f7a3f;        /* muted green */
+}
+
+.badge-bad {
+    background: var(--extraLightRedColor);   /* light rose */
+    color: var(--darkRedColor);        /* deep muted red */
+}
+
 .badge-sick {
-    background: #fdecea;   /* light rose */
-    color: #b42318;        /* deep muted red */
+    background: var(--extraLightRedColor);   /* light rose */
+    color: var(--darkRedColor);        /* deep muted red */
 }
 
 .badge-unpaid {

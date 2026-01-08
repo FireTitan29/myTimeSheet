@@ -28,28 +28,54 @@
 
         <h3 class="squares-header">This Month</h3>
         <div class="squares-holder">
-            <div class="square-block">
-                <p class="small-text-square-block">Office Hours</p>
-                <p class="large-text-square-block"><?= $personStats['officeHours'] ?>h</p>
-            </div>
-            <div class="square-block">
-                <p class="small-text-square-block">Late Arrivals</p>
-                <p class="large-text-square-block"><?= $personStats['lateArrivals'] ?></p>
-            </div>
+
             <div class="square-block">
                 <p class="small-text-square-block">Days Worked</p>
                 <p class="large-text-square-block"><?= $personStats['daysWorked'] ?></p>
             </div>
+            
             <div class="square-block">
                 <p class="small-text-square-block">Days Missed</p>
                 <p class="large-text-square-block"><?= $personStats['daysMissed'] ?></p>
             </div>
+
+            <div class="square-block">
+                <p class="small-text-square-block">Office Hours</p>
+                <p class="large-text-square-block"><?= $personStats['officeHours'] ?>h</p>
+            </div>
+
+            <div class="square-block">
+                <p class="small-text-square-block">Late Arrivals</p>
+                <p class="large-text-square-block"><?= $personStats['lateArrivals'] ?></p>
+            </div>
+            
         </div>
-        <br>
-        <p class="contact-p"><span class="highlight-span">Average Arival Time:</span><span class="dark-color"> <?= $personStats['avgTimeIn'] ?></span></p>
-        <p class="contact-p"><span class="highlight-span">Annual Leave accrued (YTD):</span><span class="dark-color"> <?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?></span></p>
-        <p>Leave Section coming soon</p>
+        <div style="margin-top: 20px;">
+            <div class="info-panel-heading" style="font-size: var(--normalFont); color:var(--darkColor);">Punctuality</div>
+            <div class="punctuality-badges">
+                <span class="badge badge-family">Expected 07:30</span>
+                <span id="month-badge" class="badge badge-<?= strtotime($personStats['avgTimeIn']) > strtotime("07:30") ? "bad" : "good" ?>">This Month <?= $personStats['avgTimeIn']?></span>
+                <span id="typical-badge" class="badge badge-<?= strtotime($personStats['lifetimeAvgTimeIn']) > strtotime("07:30") ? "bad" : "good" ?>">Usual <?= $personStats['lifetimeAvgTimeIn']?></span>
+            </div>
+        </div>
+
+        <div class="leave-comment-block" id="leave-comment-block">
+            <div class="info-panel-heading">Leave Overview</div>
+            <!-- <p class="contact-p"><span class="highlight-span">Annual Leave accrued (YTD):</span><span class="dark-color"> <?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?></span></p> -->
+        </div>
     </div>
 </div>
 
 <?php include "components/updateStaffPopUp.php" ?>
+
+<script>
+    document.querySelectorAll('.badge').forEach(badge => {
+        if (
+            !badge.classList.contains('badge-good') &&
+            !badge.classList.contains('badge-bad') &&
+            !badge.classList.contains('badge-family')
+        ) {
+            badge.style.display = 'none';
+        }
+    });
+</script>

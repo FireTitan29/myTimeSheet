@@ -117,6 +117,35 @@
         return $names;
     }
 
+    function calculateLifetimeAvgTimeIn(int $staffID): ?string {
+        $pdo = connectToDatabase();
+
+        $stmt = $pdo->prepare(
+            'SELECT AVG(
+                HOUR(timeIn) * 3600 +
+                MINUTE(timeIn) * 60 +
+                SECOND(timeIn)
+            )
+            FROM timesheet
+            WHERE staffID = :staffID
+            AND timeIn IS NOT NULL
+            AND is_leave = 0
+            AND DAYOFWEEK(date) BETWEEN 2 AND 6'
+        );
+
+        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $avgSeconds = $stmt->fetchColumn();
+        closeDatabase($pdo);
+
+        if ($avgSeconds === null) {
+            return null;
+        }
+
+        return gmdate('H:i', (int) round($avgSeconds));
+    }
+
     function calculateStatistics($staffID) {
         $personStats = [
             'officeHours' => 0,
@@ -124,6 +153,7 @@
             'daysWorked' => 0,
             'daysMissed' => 0,
             'avgTimeIn' => 0,
+            'lifetimeAvgTimeIn' => calculateLifetimeAvgTimeIn($staffID),
             'leaveDays' => 0,
         ];
 
