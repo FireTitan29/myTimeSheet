@@ -17,6 +17,8 @@ textarea:focus {
 
     --lightColor: rgb(194, 231, 255);
     --extraLightColor: rgb(230, 245, 255);
+    
+    --extraLightGrayColor: #fafafa;
     --grayColor: rgb(229, 229, 229);
     --darkGrayColor: rgb(180, 180, 180);
     --extraDarkGrayColor: rgb(117, 117, 117);
@@ -769,8 +771,8 @@ nav {
 }
 
 .staff-info-button-div {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 22px;
+    margin-bottom: 24px;
 }
 
 .staff-info-button {
@@ -799,10 +801,16 @@ nav {
 }
 
 .staff-info-contact-div {
-    background-color: var(--lightGrayColor);
+    background-color: var(--extraLightGrayColor);
     padding: 10px 15px;
-    border-radius: 5px;
+    border-radius: 3px;
     max-width: 400px;
+    border: solid;
+    border-width: 2px;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    border-color: var(--grayColor);
 }
 
 
@@ -856,7 +864,7 @@ nav {
     display: block;
     font-size: var(--largeFont);
     color: var(--mainColor);
-    margin-top: 20px;
+    margin-top: 0px;
     margin-bottom: 10px;
 }
 
@@ -945,11 +953,13 @@ nav {
 
 .block-holder-today-overview {
     background-color: #fafafa;
-    border: solid;
     padding: 20px 10px;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
+    border: solid;
+    border-radius: 5px;
+    border-color: var(--grayColor);    border: solid;
     border-radius: 5px;
     border-color: var(--grayColor);
     width: 550px;

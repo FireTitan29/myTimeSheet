@@ -12,6 +12,7 @@
     
     include 'php/database_functions.php';
     include 'php/table_functions.php';
+    include 'php/statistics_functions.php';
     include 'php/validation.php';
     include 'php/POST_to_DB.php';
     
@@ -64,7 +65,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Healthy Pet: <?= $page ?></title>
-    <link rel="stylesheet" href="mystyle.css?v=5">
+    <link rel="stylesheet" href="mystyle.css?v=6">
     <link rel="icon" type="image/x-icon" href="images/icons/staff_management_icon.svg">
 </head>
 <body <?php if ($view === 'stafflogin') echo 'style="justify-content: center;"'?>>
