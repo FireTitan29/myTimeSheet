@@ -140,24 +140,23 @@ th:last-child {
     border-right: none;
 }
 
-tr:not(.isLate):not(.today):not(.weekDay):not(.leaveDay):nth-child(even) {
-  background-color: #f7f7f7;
-}
-
-tr:not(.isLate):not(.today):not(.weekDay):not(.leaveDay):nth-child(odd) {
-  background-color: #ffffff;
-}
 
 .weekDay {
     background-color: var(--grayColor);
 }
 
-/* .leaveDay {
-    background-color: var(--grayColor);
-} */
+/* Zebra striping */
+tr:not(.isLate):not(.today):not(.weekDay):nth-child(even) {
+  background-color: #f7f7f7;
+}
 
-tr:not(.isLate):not(.today):not(.weekDay):hover, tr:hover {
-    /* background-color: var(--lightColor); */
+tr:not(.isLate):not(.today):not(.weekDay):nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Hover LAST */
+tr:not(.isLate):not(.today):not(.weekDay):hover {
+    background-color: var(--lightColor);
     box-shadow: inset 4px 0 0 var(--mainColor);
 }
 
@@ -268,6 +267,30 @@ tr[data-has-expand="1"] td {
     color: var(--mainColor);
     /* font-weight: bold; */
     cursor: pointer;
+}
+
+.delete-button {
+    border-style: none;
+    min-width: 100px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    
+    border-radius: 2px;
+    background-color: white;
+    color: var(--redColor);
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--redColor);
+}
+
+.delete-button:hover {
+    cursor: pointer;
+    background-color: var(--redColor);
+    color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--redColor);
+    
 }
 
 .commentText {

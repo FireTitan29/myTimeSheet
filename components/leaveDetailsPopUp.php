@@ -25,7 +25,7 @@
             <div class="button-div-popup">
                 <form method="POST" class="popUp-ButtonHolder extraspaceforbuttons">
                     <input id="leaveID" type="hidden" name="leaveID" value="">
-                    <input class="form-button" name="DeleteLeaveSubmit" type="submit" value="Delete">
+                    <input class="delete-button" name="DeleteLeaveSubmit" type="submit" value="Delete">
                     <button class="form-button" type="button" onclick="closeLeaveDetailsPopUp()">Close</button>
                 </form>
             </div>

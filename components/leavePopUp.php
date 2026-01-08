@@ -1,5 +1,9 @@
-<?php $leaveFormHasErrors =
+<?php 
+
+    $leaveFormHasErrors =
     isset($_POST['LeavePopUpFormSubmit']) && !empty($errors); 
+
+    $publicHolidays = getAllPublicHolidays($year);
 ?>
 <form method="POST" class="popUpForm" id="popUpForm-Leave">
     <!-- Hidden Inputs -->
@@ -63,6 +67,10 @@
                 <label id="thisLeaveDate" class="managementCommentHeading smallerheading dateHeadingPopUp leave-date-start">
                     Start Date:
                 </label>
+                <span id="leave-skip-helper"
+                      class="error leave-error"
+                      style="display:none; margin:4px 0;">
+                </span>
                 <label id="endLeaveDate" class="managementCommentHeading smallerheading dateHeadingPopUp leave-date-end">
                     End Date:
                 </label>
@@ -80,6 +88,16 @@
 </form>
 
 <script>
+const PUBLIC_HOLIDAYS = <?= json_encode(array_column($publicHolidays, 'holiday_date')) ?>;
+
+function isPublicHolidayJS(dateObj) {
+    const yyyy = dateObj.getFullYear();
+    const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const dd = String(dateObj.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+
+    return PUBLIC_HOLIDAYS.indexOf(dateStr) !== -1;
+}
 
 function parseDate(dateStr) {
     if (!dateStr) return null;
@@ -157,6 +175,10 @@ function updateEndDate() {
     const startDateStr = document.getElementById("calendarDate-leave").value;
     const days = parseInt(document.getElementById("noOfDays").value, 10);
     const endDateLabel = document.getElementById("endLeaveDate");
+    const helper = document.getElementById("leave-skip-helper");
+
+    helper.style.display = "none";
+    helper.textContent = "";
 
     const startDate = parseDate(startDateStr);
 
@@ -168,14 +190,27 @@ function updateEndDate() {
     let endDate = new Date(startDate);
     let daysRemaining = days - 1;
 
+    let skippedWeekend = false;
+    let skippedHoliday = false;
+
     while (daysRemaining > 0) {
         endDate.setDate(endDate.getDate() + 1);
 
         const dayOfWeek = endDate.getDay();
-        // 0 = Sunday, 6 = Saturday
-        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-            daysRemaining--;
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const isHoliday = isPublicHolidayJS(endDate);
+
+        if (isWeekend) {
+            skippedWeekend = true;
+            continue;
         }
+
+        if (isHoliday) {
+            skippedHoliday = true;
+            continue;
+        }
+
+        daysRemaining--;
     }
 
     const yyyy = endDate.getFullYear();
@@ -184,6 +219,19 @@ function updateEndDate() {
 
     endDateLabel.textContent =
         "End Date: " + formatDateLabel(`${yyyy}-${mm}-${dd}`);
+
+    // Show helper message if anything was skipped
+    if (skippedHoliday || skippedWeekend) {
+        helper.style.display = "block";
+
+        if (skippedHoliday && skippedWeekend) {
+            helper.textContent = "Public holiday and weekend skipped within selected date range.";
+        } else if (skippedHoliday) {
+            helper.textContent = "Public holiday skipped within selected date range.";
+        } else if (skippedWeekend) {
+            helper.textContent = "Weekend skipped within selected date range.";
+        }
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

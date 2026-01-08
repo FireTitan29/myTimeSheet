@@ -73,6 +73,29 @@
         return $row ? $row : null;
     }
 
+    // Check if a date is a public holiday
+    function isPublicHoliday($date, $countryCode = 'ZA') {
+        $pdo = connectToDatabase();
+
+        $stmt = $pdo->prepare(
+            "SELECT 1
+             FROM public_holiday
+             WHERE holiday_date = :holiday_date
+               AND country_code = :country_code
+             LIMIT 1"
+        );
+
+        $stmt->execute([
+            ':holiday_date' => $date,
+            ':country_code' => $countryCode
+        ]);
+
+        $isHoliday = (bool) $stmt->fetchColumn();
+        closeDatabase($pdo);
+
+        return $isHoliday;
+    }
+
     // Sending leave to the DB
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['leaveRequest'])) {
         $staffID = $_POST['staffID'] ?? '';
@@ -115,9 +138,10 @@
         
         while ($daysAdded < $numberOfDays) {
             $dayOfWeek = (int) $currentDate->format('N');
+            $dateStr   = $currentDate->format('Y-m-d');
 
-            if ($dayOfWeek <= 5) { // Mon–Fri only
-                $requestedDates[] = $currentDate->format('Y-m-d');
+            if ($dayOfWeek <= 5 && !isPublicHoliday($dateStr)) { // Mon–Fri, not public holiday
+                $requestedDates[] = $dateStr;
                 $daysAdded++;
             }
 
@@ -166,7 +190,7 @@
                             day_type = :dayType,
                             doctors_note_required = :doctorsNoteRequired,
                             doctors_note_received = :doctorsNoteReceived,
-                            duration_days = :duration_days
+                            duration_days = :duration_days,
                             leave_comment = :comment
                         WHERE leave_id = :leaveID"
                     );
@@ -211,8 +235,9 @@
 
                     // 1 = Monday, 7 = Sunday
                     $dayOfWeek = (int) $currentDate->format('N');
+                    $dateStr = $currentDate->format('Y-m-d');
 
-                    if ($dayOfWeek <= 5) {
+                    if ($dayOfWeek <= 5 && !isPublicHoliday($dateStr)) {
                         // Check if a timesheet record already exists for this date
                         $checkStmt = $pdo->prepare(
                             "SELECT recordID
@@ -276,6 +301,43 @@
         }
     }
 
+    function recordHasData($record) {
+        return !empty($record['timeIn']) ||
+            !empty($record['timeOut']) ||
+            !empty($record['staff_comment']) ||
+            !empty($record['management_comment']);
+    }
+
     // Delete Leave
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['DeleteLeaveSubmit'])) {
+        $pdo = connectToDatabase();
+        $pdo->beginTransaction();
+        try {
+            $leaveID = $_POST['leaveID'];
+            $stmt = $pdo->prepare("SELECT * FROM timesheet WHERE leave_id = :leave_id");
+            $stmt->execute([":leave_id" => $leaveID]);
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($rows as $record) {
+                if (recordHasData($record)) {
+                    $stmt = $pdo->prepare('UPDATE timesheet SET is_leave = 0, leave_id = null WHERE recordID = :recordID');
+                    $stmt->execute([":recordID" => $record['recordID']]);
+                } else {
+                    $stmt = $pdo->prepare('DELETE FROM timesheet WHERE recordID = :recordID');
+                    $stmt->execute([":recordID" => $record['recordID']]);
+                }
+            }
+            
+            $stmt = $pdo->prepare("DELETE FROM staff_leave WHERE leave_id = :leave_id");
+            $stmt->execute([":leave_id" => $leaveID]);
+            $pdo->commit();
+            header('Location: index.php?view=table');
+            exit;
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
     
 ?>

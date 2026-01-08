@@ -273,71 +273,67 @@
     }
 
     function calculateAnnualLeaveDays(int $staffID): float {
-        $pdo = connectToDatabase();
+    $pdo = connectToDatabase();
 
-        /**
-         * Calculate accrued leave
-         * Rule: 1 day leave per 17 worked days
-         * Exclude leave days themselves
-         */
-        $stmt = $pdo->prepare(
-            'SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
-            FROM timesheet t
-            LEFT JOIN staff_leave l
-            ON l.staffID = t.staffID
-            AND l.leave_date = t.date
-            WHERE t.staffID = :staffID
-            AND t.timeIn IS NOT NULL
-            AND l.leaveID IS NULL
-            AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
-            AND t.date <= CURDATE()'
-        );
+    /**
+     * Calculate accrued leave
+     * Rule: 1 day leave per 17 worked days
+     * Excludes leave days via timesheet.is_leave
+     */
+    $stmt = $pdo->prepare(
+        'SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
+         FROM timesheet t
+         WHERE t.staffID = :staffID
+           AND t.timeIn IS NOT NULL
+           AND t.is_leave = 0
+           AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
+           AND t.date <= CURDATE()'
+    );
 
-        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
-        $stmt->execute();
-        $leaveAccrued = (float) $stmt->fetchColumn();
+    $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+    $stmt->execute();
+    $leaveAccrued = (float) $stmt->fetchColumn();
 
-        /**
-         * Cap annual leave accrual
-         */
-        $leaveAccrued = min($leaveAccrued, 15);
+    /**
+     * Cap annual leave accrual
+     */
+    $leaveAccrued = min($leaveAccrued, 15);
 
+    /**
+     * Get starting leave balance
+     */
+    $stmt = $pdo->prepare(
+        'SELECT leave_balance
+         FROM staff
+         WHERE staffID = :staffID'
+    );
 
-        /**
-         * Get Starting leave amount
-         */
+    $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+    $stmt->execute();
+    $leaveBalance = (float) $stmt->fetchColumn();
 
-        $stmt = $pdo->prepare(
-            'SELECT leave_balance
-            FROM staff
-            WHERE staffID = :staffID
-        ');
+    /**
+     * Calculate leave already taken (Annual only)
+     * duration_days is authoritative
+     */
+    $stmt = $pdo->prepare(
+        'SELECT COALESCE(SUM(duration_days), 0)
+         FROM staff_leave
+         WHERE staffID = :staffID
+           AND leave_type = \'Annual\''
+    );
 
-        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
-        $stmt->execute();
-        $leaveBalance = (float) $stmt->fetchColumn();
+    $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
+    $stmt->execute();
+    $leaveTaken = (float) $stmt->fetchColumn();
 
-        /**
-         * Calculate leave already taken
-         */
-        $stmt = $pdo->prepare(
-            'SELECT COALESCE(SUM(leave_amount), 0)
-            FROM staff_leave
-            WHERE staffID = :staffID
-            AND leave_type = \'Annual\''
-        );
+    closeDatabase($pdo);
 
-        $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
-        $stmt->execute();
-        $leaveTaken = (float) $stmt->fetchColumn();
-
-        closeDatabase($pdo);
-
-        /**
-         * Remaining leave
-         */
-        return round(($leaveBalance+$leaveAccrued) - $leaveTaken, 2);
-    }
+    /**
+     * Remaining leave
+     */
+    return round(($leaveBalance + $leaveAccrued) - $leaveTaken, 2);
+}
 
     function currentlyInAndOut() {
         $pdo = connectToDatabase();
@@ -404,6 +400,21 @@
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         closeDatabase($pdo);
 
+        return $rows;
+    }
+
+    function getAllPublicHolidays() {
+        $pdo = connectToDatabase();
+        $stmt = $pdo->prepare(
+            'SELECT holiday_date, name
+             FROM public_holiday
+             WHERE country_code = \'ZA\'
+             ORDER BY holiday_date ASC'
+        );
+
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        closeDatabase($pdo);
         return $rows;
     }
 ?>
