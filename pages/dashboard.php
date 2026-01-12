@@ -6,7 +6,17 @@ if (!defined('APP_RUNNING')) {
 ?>
 
 <?php 
-    $staff = currentlyInAndOut(); 
+    $staff = currentlyInAndOut();
+
+    usort($staff, function ($a, $b) {
+    // Put people without timeIn at the bottom
+        if (empty($a['timeIn']) && empty($b['timeIn'])) return 0;
+        if (empty($a['timeIn'])) return 1;
+        if (empty($b['timeIn'])) return -1;
+
+        return strtotime($a['timeIn']) <=> strtotime($b['timeIn']);
+    });
+    
     $in = 0;
     $out = 0;
     $lateCount = 0;
@@ -23,22 +33,24 @@ if (!defined('APP_RUNNING')) {
                 <?php foreach ($staff as $person): ?>
                     <?php if ($person['timeIn'] && !$person['timeOut']) $pendingClockOut++; ?>
                     <?php if (!$person['timeOut'] && $person['timeIn']): ?>
+                        <a style="text-decoration: none;" href="index.php?view=staffmanagement&staffMember=<?= $person['staffID'] ?>">
                         <label class="in-out-person in-person">
-                        <?php include 'components/dashboardPopUp.php'; ?>
-                        <?= $person['staffName'] ?><br>
-                        <span class="timein-dashboard">Clocked In: <?= date('H:i', strtotime($person['timeIn'])); ?></span>
-                        <?php 
-                            $in++; 
-                            $timeIn = strtotime($person['timeIn']);
-                            $cutoff = strtotime(date('Y-m-d', strtotime($person['timeIn'])) . ' 07:30:00');
-                            $isLate = $timeIn > $cutoff;
+                            <?php include 'components/dashboardPopUp.php'; ?>
+                            <?= $person['staffName'] ?><br>
+                            <span class="timein-dashboard">In Office: <?= date('H:i', strtotime($person['timeIn'])); ?></span>
+                            <?php 
+                                $in++; 
+                                $timeIn = strtotime($person['timeIn']);
+                                $cutoff = strtotime(date('Y-m-d', strtotime($person['timeIn'])) . ' 07:30:00');
+                                $isLate = $timeIn > $cutoff;
 
-                            if ($isLate) {
-                                $lateCount++;
-                                echo "<span class='late-pill'>⏰ Late</span>";
-                            }
-                        ?>
-                    </label>
+                                if ($isLate) {
+                                    $lateCount++;
+                                    echo "<span class='late-pill'>⏰ Late</span>";
+                                }
+                            ?>
+                        </label>
+                    </a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -47,18 +59,22 @@ if (!defined('APP_RUNNING')) {
                 <h3 class="block-header">Not In</h3>
                 <?php foreach ($staff as $person): ?>
                     <?php if (!$person['timeOut'] && !$person['timeIn']): ?>
-                        <label class="in-out-person out-person">
-                            <?= $person['staffName'] ?><br>
-                            <span class="timeout-dashboard">Not Clocked In</span>
-                            <?php $out++; ?>
-                        </label>
+                        <a style="text-decoration: none; cur" href="index.php?view=staffmanagement&staffMember=<?= $person['staffID'] ?>">
+                            <label class="in-out-person out-person">
+                                <?= $person['staffName'] ?><br>
+                                <span class="timeout-dashboard">Not Clocked In</span>
+                                <?php $out++; ?>
+                            </label>
+                        </a>
                     <?php elseif ($person['timeOut'] && $person['timeIn']): ?>
-                        <label class="in-out-person in-person">
-                            <?php include 'components/dashboardPopUp.php'; ?>
-                            <?= $person['staffName'] ?><br>
-                            <span class="timein-dashboard">Clocked Out: <?= date('H:i', strtotime($person['timeOut'])); ?></span>
-                            <?php $out++; ?>
-                        </label>
+                        <a style="text-decoration: none;" href="index.php?view=staffmanagement&staffMember=<?= $person['staffID'] ?>">
+                            <label class="in-out-person in-person">
+                                <?php include 'components/dashboardPopUp.php'; ?>
+                                <?= $person['staffName'] ?><br>
+                                <span class="timein-dashboard">Clocked Out: <?= date('H:i', strtotime($person['timeOut'])); ?></span>
+                                <?php $out++; ?>
+                            </label>
+                        </a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -78,7 +94,7 @@ if (!defined('APP_RUNNING')) {
                         <p class="large-text-square-block"><?= sizeof($staff) ?></p>
                 </div>
                 <div class="square-block">
-                        <p class="small-text-square-block">Clocked In</p>
+                        <p class="small-text-square-block">In Office</p>
                         <p class="large-text-square-block"><?= $in ?></p>
                 </div>
                 <div class="square-block">
@@ -86,7 +102,7 @@ if (!defined('APP_RUNNING')) {
                         <p class="large-text-square-block"><?= $lateCount ?></p>
                 </div>
                 <div class="square-block">
-                        <p class="small-text-square-block">Not In</p>
+                        <p class="small-text-square-block">Out of Office</p>
                         <p class="large-text-square-block"><?= $out ?></p>
                 </div>
                 <div class="square-block">
