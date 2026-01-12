@@ -109,7 +109,7 @@
 
         $pdo = connectToDatabase();
         $existing = getRecord($staffID, $calendarDate);
-        if ($existing && empty($existing['timeIn']) && $commentText === null) {
+        if ($existing && empty($existing['timeIn']) && empty($existing['is_leave']) && $commentText === null) {
 
             // 1) Row exists, no timeIn, comment now cleared -> DELETE row
             $stmt = $pdo->prepare('DELETE FROM timesheet WHERE recordID = :id');
