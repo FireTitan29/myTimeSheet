@@ -187,19 +187,20 @@
      ?>
     <button
         class="toggle-comments row-preview leave-preview"
-        onclick="openLeaveDetailsPopUp(
-            <?= (int)$leaveRecord['leave_id'] ?>,
-            <?= json_encode($person, JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
-            <?= json_encode($leaveRecord['leave_type'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
-            <?= json_encode(ucwords($leaveRecord['day_type']), JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
-            <?= json_encode($leaveStart, JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
-            <?= json_encode($leaveEnd, JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
-            <?= (int)$leaveRecord['duration_days'] ?>,
-            <?= (int)$leaveRecord['doctors_note_received'] ?>,
-            <?= json_encode($leaveRecord['leave_comment'], JSON_HEX_APOS | JSON_HEX_QUOT) ?>
-        )"
+        onclick='openLeaveDetailsPopUp(
+            <?= (int)$leaveRecord["leave_id"] ?>,
+            <?= json_encode($person) ?>,
+            <?= json_encode($leaveRecord["leave_type"]) ?>,
+            <?= json_encode(ucwords($leaveRecord["day_type"])) ?>,
+            <?= json_encode($leaveStart) ?>,
+            <?= json_encode($leaveEnd) ?>,
+            <?= (int)$leaveRecord["duration_days"] ?>,
+            <?= (int)$leaveRecord["doctors_note_received"] ?>,
+            <?= htmlspecialchars(json_encode($leaveRecord["leave_comment"])) ?>
+        )'
     >
-        <?= ucwords($leaveRecord['leave_type']) ?> Leave
+        <?= isset($staffRecord["leave_id"]) ? ucwords($leaveRecord["leave_type"]) : "" ?>
+        Leave
     </button>
 
         <div class="comments-content" style="display:none;">
