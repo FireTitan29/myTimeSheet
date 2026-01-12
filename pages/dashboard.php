@@ -7,7 +7,7 @@ if (!defined('APP_RUNNING')) {
 
 <?php 
     $staff = currentlyInAndOut();
-
+    
     usort($staff, function ($a, $b) {
     // Put people without timeIn at the bottom
         if (empty($a['timeIn']) && empty($b['timeIn'])) return 0;
@@ -37,7 +37,7 @@ if (!defined('APP_RUNNING')) {
                         <label class="in-out-person in-person">
                             <?php include 'components/dashboardPopUp.php'; ?>
                             <?= $person['staffName'] ?><br>
-                            <span class="timein-dashboard">In Office: <?= date('H:i', strtotime($person['timeIn'])); ?></span>
+                            <span class="timein-dashboard">Clocked In: <?= date('H:i', strtotime($person['timeIn'])); ?></span>
                             <?php 
                                 $in++; 
                                 $timeIn = strtotime($person['timeIn']);
@@ -62,7 +62,11 @@ if (!defined('APP_RUNNING')) {
                         <a style="text-decoration: none; cur" href="index.php?view=staffmanagement&staffMember=<?= $person['staffID'] ?>">
                             <label class="in-out-person out-person">
                                 <?= $person['staffName'] ?><br>
+                                <?php if ($person['is_leave'] === 1): ?>
+                                    <span class="timeout-dashboard"><?= ucwords($person['leave_type']) ?> Leave</span>
+                                <?php else: ?>
                                 <span class="timeout-dashboard">Not Clocked In</span>
+                                <?php endif;?>
                                 <?php $out++; ?>
                             </label>
                         </a>

@@ -151,11 +151,22 @@
         $today = date('Y-m-d');
 
         $stmt = $pdo->prepare(
-            'SELECT s.staffID, s.staffName, t.timeIn, t.timeOut, t.staff_comment_early, t.staff_comment_late, t.management_comment
+            'SELECT 
+                s.staffID,
+                s.staffName,
+                t.timeIn,
+                t.timeOut,
+                t.staff_comment_early,
+                t.staff_comment_late,
+                t.management_comment,
+                t.is_leave,
+                l.leave_type
             FROM staff s
             LEFT JOIN timesheet t
-            ON t.staffID = s.staffID
-            AND t.date = :today
+                ON t.staffID = s.staffID
+                AND t.date = :today
+            LEFT JOIN staff_leave l
+                ON l.leave_id = t.leave_id
             WHERE s.active = 1
             ORDER BY s.staffName ASC'
         );
