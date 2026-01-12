@@ -52,9 +52,10 @@
             <div style="margin-top: 20px;">
                 <div class="info-panel-heading" style="font-size: var(--normalFont); color:var(--darkColor);">Punctuality</div>
                 <div class="punctuality-badges">
-                    <span class="badge badge-family">Expected 07:30</span>
-                    <span id="month-badge" class="badge badge-<?= strtotime($personStats['avgTimeIn']) > strtotime("07:30") ? "bad" : "good" ?>">This Month <?= $personStats['avgTimeIn']?></span>
-                    <span id="typical-badge" class="badge badge-<?= strtotime($personStats['lifetimeAvgTimeIn']) > strtotime("07:30") ? "bad" : "good" ?>">Usual <?= $personStats['lifetimeAvgTimeIn']?></span>
+                    <?php $expectedArrivialTime = date( 'H:i', strtotime(getExpectedArrivialTime($selectedPerson['staffID']))) ?>
+                    <span class="badge badge-family"><?= $expectedArrivialTime ?></span>
+                    <span id="month-badge" class="badge badge-<?= strtotime($personStats['avgTimeIn']) > strtotime($expectedArrivialTime) ? "bad" : "good" ?>">This Month <?= $personStats['avgTimeIn']?></span>
+                    <span id="typical-badge" class="badge badge-<?= strtotime($personStats['lifetimeAvgTimeIn']) > strtotime($expectedArrivialTime) ? "bad" : "good" ?>">Usual <?= $personStats['lifetimeAvgTimeIn']?></span>
                 </div>
             </div>
         </div>

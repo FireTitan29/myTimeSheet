@@ -230,4 +230,14 @@
     }
 
 
+    function getExpectedArrivialTime($staffMemberID) {
+            // Getting the expected arrivial time
+            $pdo = connectToDatabase();
+            $stmt = $pdo->prepare('SELECT expected_arrival_time from staff where staffID = :staffID LIMIT 1');
+            $stmt->execute([':staffID' => $staffMemberID]);
+            
+            $expectedArrivalTime = $stmt->fetchColumn();
+            return $expectedArrivalTime;
+    }
+
 ?>

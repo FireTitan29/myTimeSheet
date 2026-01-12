@@ -22,9 +22,12 @@
         $staffRecord = getRecord($staffMemberID, $dbDate);
         $isLate = false;
 
+        
         if (!empty($staffRecord['timeIn'])) {
             $timeIn = strtotime($staffRecord['timeIn']);
-            $cutoff = strtotime(date('Y-m-d', strtotime($staffRecord['timeIn'])) . ' 07:30:00');
+
+            $expectedArrivalTime = getExpectedArrivialTime($staffMemberID);
+            $cutoff = strtotime(date('Y-m-d', strtotime($staffRecord['timeIn'])) . ' ' . $expectedArrivalTime);
             
             $isLate = $timeIn > $cutoff;
         }
@@ -43,8 +46,6 @@
                 break;
             }
         }
-
-        // var_dump($publicHolidayName);
 
         include 'components/dateRow.php';
     }

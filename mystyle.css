@@ -528,13 +528,17 @@ nav {
 .form-text-input-email {
     box-sizing: border-box;
     height: 30px;
-    width: 295px;
+    width: 370px;
 }
 
 .form-text-input-name {
     box-sizing: border-box;
     height: 30px;
-    width: 145px;
+    width: 180px;
+}
+
+.input-section {
+    margin-bottom: 0px;
 }
 
 .form-text-input-email, .form-text-input-name {

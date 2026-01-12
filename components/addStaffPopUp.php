@@ -1,5 +1,5 @@
 <div class="popUpForm" id="addStaff-form">
-    <div class="block-holder-popup" >
+    <div class="popUpForm-Comment-div leave-popup-div" >
         <div>
             <?php
                 // Only show validation errors for the form that was actually submitted
@@ -8,28 +8,50 @@
             ?>
             <h3 class="block-header">Add Staff Member</h3>
             <form method="POST">
-                <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['name'])) echo $errors['name']; ?></small>
-                <input id="firstname-add" autocomplete="off" class="form-text-input-name" type="text" placeholder="First Name" name="firstname" value="<?= htmlspecialchars($_POST['firstname'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                <input autocomplete="off" class="form-text-input-name" type="text" placeholder="Surname" name="surname" value="<?= htmlspecialchars($_POST['surname'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><br>
+                <div class="input-section">
+                    <span class="highlight-span">Name</span>
+                    <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['name'])) echo $errors['name']; ?></small>
+                    <input id="firstname-add" autocomplete="off" class="form-text-input-name" type="text" placeholder="First Name" name="firstname" value="<?= htmlspecialchars($_POST['firstname'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <input autocomplete="off" class="form-text-input-name" type="text" placeholder="Surname" name="surname" value="<?= htmlspecialchars($_POST['surname'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
 
-                <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['email'])) echo $errors['email']; ?></small>
-                <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><br>
-                <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['number'])) echo $errors['number']; ?></small>
-                <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Phone Number" name="number" value="<?= htmlspecialchars($_POST['number'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><br>
-                <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['role'])) echo $errors['role']; ?></small>
-                <select class="optionBox" name="role">
-                    <option value="" hidden   <?= $addRole === '' ? 'selected' : '' ?>>Role</option>
-                    <option value="manager"   <?= $addRole === 'manager' ? 'selected' : '' ?>>Manager</option>
-                    <option value="admin"     <?= $addRole === 'admin' ? 'selected' : '' ?>>Admin</option>
-                    <option value="office"    <?= $addRole === 'office' ? 'selected' : '' ?>>Office</option>
-                    <option value="salesrep"  <?= $addRole === 'salesrep' ? 'selected' : '' ?>>Sales Rep</option>
-                    <option value="warehouse" <?= $addRole === 'warehouse' ? 'selected' : '' ?>>Warehouse</option>
-                    <option value="staff"     <?= $addRole === 'staff' ? 'selected' : '' ?>>General Staff</option>
-                </select>
+                <div class="input-section">
+                    <span class="highlight-span">Email</span>
+                    <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['email'])) echo $errors['email']; ?></small>
+                    <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
+
+                <div class="input-section">
+                    <span class="highlight-span">Phone</span>
+                    <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['number'])) echo $errors['number']; ?></small>
+                    <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Phone Number" name="number" value="<?= htmlspecialchars($_POST['number'] ?? '', ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
+
+                <div class="input-section">
+                    <span class="highlight-span">Role</span>
+                    <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['role'])) echo $errors['role']; ?></small>
+                    <select class="optionBox" name="role">
+                        <option value="" hidden   <?= $addRole === '' ? 'selected' : '' ?>>Role</option>
+                        <option value="manager"   <?= $addRole === 'manager' ? 'selected' : '' ?>>Manager</option>
+                        <option value="admin"     <?= $addRole === 'admin' ? 'selected' : '' ?>>Admin</option>
+                        <option value="office"    <?= $addRole === 'office' ? 'selected' : '' ?>>Office</option>
+                        <option value="salesrep"  <?= $addRole === 'salesrep' ? 'selected' : '' ?>>Sales Rep</option>
+                        <option value="warehouse" <?= $addRole === 'warehouse' ? 'selected' : '' ?>>Warehouse</option>
+                        <option value="staff"     <?= $addRole === 'staff' ? 'selected' : '' ?>>General Staff</option>
+                    </select>
+                </div>
+
+                <div class="input-section">
+                    <span class="highlight-span">Arrival Time</span>
+                    <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['time'])) echo $errors['time']; ?></small>
+                    <input autocomplete="off" class="optionBox" type="time" name="expectedTime" value="<?= htmlspecialchars($_POST['expectedTime'] ?? '07:30', ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
+
                 <input type="hidden" name="addStaffMember" value="true">
-                <br>
-                <button class="form-button" type="submit">Submit</button>
-                <button class="form-button" type="button" onclick="closeForm()">Cancel</button>
+                <div class="input-section" style="margin-bottom: 15px; margin-top:15px">
+                    <button class="form-button" type="submit">Submit</button>
+                    <button class="form-button" type="button" onclick="closeForm()">Cancel</button>
+                </div>
             </form>
         </div>
     </div>

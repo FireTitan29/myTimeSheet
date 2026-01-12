@@ -11,37 +11,52 @@
     $surname   = trim($_POST['surname-update'] ?? $defaultSurname);
     $email     = trim($_POST['email-update'] ?? ($selectedPerson['email'] ?? ''));
     $phone     = trim($_POST['number-update'] ?? ($selectedPerson['phone'] ?? ''));
+    $expected_arrival_time     = trim($_POST['expectedTime-update'] ?? ($selectedPerson['expected_arrival_time'] ?? '07:30'));
     $updateRole = $_POST['role-update'] ?? ($selectedPerson['role'] ?? '');
 ?>
 <div class="popUpForm" id="updateStaff-form">
-    <div class="block-holder-popup">
+    <div class="popUpForm-Comment-div leave-popup-div">
         <div>
             <h3 class="block-header">Update Staff Details</h3>
             <form method="POST">
-                <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['name'])) echo $errors['name']; ?></small>
-                <input id="firstname-update" autocomplete="off" class="form-text-input-name" type="text" placeholder="First Name" name="firstname-update" value="<?= htmlspecialchars($firstname, ENT_QUOTES, 'UTF-8') ?>">
-                <input autocomplete="off" class="form-text-input-name" type="text" placeholder="Surname" name="surname-update" value="<?= htmlspecialchars($surname, ENT_QUOTES, 'UTF-8') ?>"><br>
-                
-                <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['email'])) echo $errors['email']; ?></small>
-                <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Email" name="email-update" value="<?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8') ?>"><br>
-                
-                <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['number'])) echo $errors['number']; ?></small>
-                <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Phone Number" name="number-update" value="<?= htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') ?>"><br>
-                <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['role'])) echo $errors['role']; ?></small>
-                <select class="optionBox" name="role-update">
-                    <option value="" hidden   <?= $updateRole === '' ? 'selected' : '' ?>>Role</option>
-                    <option value="manager"   <?= $updateRole === 'manager' ? 'selected' : '' ?>>Manager</option>
-                    <option value="admin"     <?= $updateRole === 'admin' ? 'selected' : '' ?>>Admin</option>
-                    <option value="office"    <?= $updateRole === 'office' ? 'selected' : '' ?>>Office</option>
-                    <option value="salesrep"  <?= $updateRole === 'salesrep' ? 'selected' : '' ?>>Sales Rep</option>
-                    <option value="warehouse" <?= $updateRole === 'warehouse' ? 'selected' : '' ?>>Warehouse</option>
-                    <option value="staff"     <?= $updateRole === 'staff' ? 'selected' : '' ?>>General Staff</option>
-                </select>
+                <div class="input-section">
+                <span class="highlight-span">Name</span>
+                    <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['name'])) echo $errors['name']; ?></small>
+                    <input id="firstname-update" autocomplete="off" class="form-text-input-name" type="text" placeholder="First Name" name="firstname-update" value="<?= htmlspecialchars($firstname, ENT_QUOTES, 'UTF-8') ?>">
+                    <input autocomplete="off" class="form-text-input-name" type="text" placeholder="Surname" name="surname-update" value="<?= htmlspecialchars($surname, ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
+
+                <div class="input-section">
+                    <span class="highlight-span">Email</span>
+                    <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['email'])) echo $errors['email']; ?></small>
+                    <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Email" name="email-update" value="<?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
+                <div class="input-section">
+                    <span class="highlight-span">Phone</span>
+                    <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['number'])) echo $errors['number']; ?></small>
+                    <input autocomplete="off" class="form-text-input-email" type="text" placeholder="Phone Number" name="number-update" value="<?= htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
+                <div class="input-section">
+                    <span class="highlight-span">Role</span>
+                    <small class="form-error-message"><?php if ($isUpdateSubmit && isset($errors['role'])) echo $errors['role']; ?></small>
+                    <select class="optionBox" name="role-update">
+                        <option value="" hidden   <?= $updateRole === '' ? 'selected' : '' ?>>Role</option>
+                        <option value="manager"   <?= $updateRole === 'manager' ? 'selected' : '' ?>>Manager</option>
+                        <option value="admin"     <?= $updateRole === 'admin' ? 'selected' : '' ?>>Admin</option>
+                        <option value="office"    <?= $updateRole === 'office' ? 'selected' : '' ?>>Office</option>
+                        <option value="salesrep"  <?= $updateRole === 'salesrep' ? 'selected' : '' ?>>Sales Rep</option>
+                        <option value="warehouse" <?= $updateRole === 'warehouse' ? 'selected' : '' ?>>Warehouse</option>
+                        <option value="staff"     <?= $updateRole === 'staff' ? 'selected' : '' ?>>General Staff</option>
+                    </select>
+                </div>
+                <div class="input-section">
+                    <span class="highlight-span">Arrival Time</span>
+                    <small class="form-error-message"><?php if ($isAddSubmit && isset($errors['time'])) echo $errors['time']; ?></small>
+                    <input autocomplete="off" class="optionBox" type="time" name="expectedTime-update" value="<?= htmlspecialchars($expected_arrival_time ?? '07:30', ENT_QUOTES, 'UTF-8') ?>"><br>
+                </div>
                 <input type="hidden" name="updateStaffMember" value="true">
                 <input type="hidden" name="staffID" value="<?= $id ?>">
-
-                <br>
-                <div class="button-div-popup">
+                <div class="input-section" style="margin-bottom: 15px; margin-top:15px">
                     <button class="form-button" type="submit">Submit</button>
                     <span style="margin-right: 5px;"></span>
                     <button class="form-button" type="button" onclick="closeUpdateForm()">Cancel</button>

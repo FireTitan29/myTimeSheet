@@ -255,12 +255,9 @@
 
         // ! Potential bug
         unset($_SESSION['admin']);
-
         $pin = trim($_POST['pin'] ?? '');
         $ip = $_SERVER['REMOTE_ADDR'];
         $nowTs    = time();
-        $cutoffTs = strtotime('today 07:30');
-        $finishTs = strtotime('today 17:00');
 
         if ($pin === '') {
             $errors['pin'] = 'Cannot be Empty';
@@ -273,6 +270,14 @@
             if (!$staffID) {
                 $errors['pin'] = 'Invalid PIN';
             } else {
+
+                // Getting the expected arrivial time
+            
+                $expectedArrivalTime = getExpectedArrivialTime($staffID);
+                
+                $cutoffTs = strtotime('today' . ' ' . $expectedArrivalTime);
+                $finishTs = strtotime('today 17:00');
+
                 $record = getRecord($staffID, date('Y-m-d'));
 
                 // Determine today's state
@@ -296,8 +301,9 @@
 
                     // Late clock-in (07:30 to 17:00)
                     } else {
+                        $expectedArrivalTime = date('H:i', strtotime($expectedArrivalTime));
                         $errors['late'] = getStaffMemberDetails($staffID)['staffName'];
-                        $errors['offence'] = "You're clocking in <i><strong>after</strong></i> your scheduled start time (07:30). Please add a short note for your manager.";
+                        $errors['offence'] = "You're clocking in <i><strong>after</strong></i> your scheduled start time (". $expectedArrivalTime ."). Please add a short note for your manager.";
                         $errors['earlyLate'] = 'late';
                     }
 
@@ -369,6 +375,10 @@
         $surname = trim($_POST['surname'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $number = trim($_POST['number'] ?? '');
+
+        $expectedArrivalTime = trim($_POST['expectedTime'] ?? '07:30');
+        $expectedArrivalTime = date('H:i:s', strtotime($expectedArrivalTime));
+
         $phoneForDb = ($number === '') ? null : $number;
         $role = $_POST['role'] ?? '';
 
@@ -378,8 +388,8 @@
             $pdo = connectToDatabase();
             $name = $firstname . ' ' . $surname;
 
-            $sql = 'INSERT INTO staff (staffName, email, role, phone, pin)
-                    VALUES (:name, :email, :role, :phone, :pin)';
+            $sql = 'INSERT INTO staff (staffName, email, role, phone, pin, expected_arrival_time)
+                    VALUES (:name, :email, :role, :phone, :pin, :expected_arrival_time)';
 
             $maxTries = 50;
 
@@ -392,6 +402,7 @@
                     $stmt->bindValue(':email', $email);
                     $stmt->bindValue(':role', $role);
                     $stmt->bindValue(':pin', $pin);
+                    $stmt->bindValue(':expected_arrival_time', $expectedArrivalTime);
 
                     if ($phoneForDb === null) {
                         $stmt->bindValue(':phone', null, PDO::PARAM_NULL);
@@ -424,6 +435,10 @@
         $surname = trim($_POST['surname-update'] ?? '');
         $email = trim($_POST['email-update'] ?? '');
         $number = trim($_POST['number-update'] ?? '');
+
+        $expectedArrivalTime = trim($_POST['expectedTime-update'] ?? '07:30');
+        $expectedArrivalTime = date('H:i:s', strtotime($expectedArrivalTime));
+
         $phoneForDb = ($number === '') ? null : $number;
         $role = $_POST['role-update'] ?? '';
         $id = $_POST['staffID'] ?? '';
@@ -450,13 +465,15 @@
                     staffName = :name,
                     email     = :email,
                     role      = :role,
-                    phone     = :phone
+                    phone     = :phone,
+                    expected_arrival_time = :expected_arrival_time
                 WHERE staffID = :id'
             );
 
             $stmt->bindValue(':name', $name);
             $stmt->bindValue(':email', $email);
             $stmt->bindValue(':role', $role);
+            $stmt->bindValue(':expected_arrival_time', $expectedArrivalTime);
             if ($phoneForDb === null) {
                 $stmt->bindValue(':phone', null, PDO::PARAM_NULL);
             } else {

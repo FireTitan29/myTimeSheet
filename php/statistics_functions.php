@@ -54,7 +54,7 @@ function getTimesheetRowsForPeriod($staffID, $startDate, $endDate): array {
     return $rows;
 }
 
-function calculateWorkedStats(array $rows, DateTime $today): array {
+function calculateWorkedStats(array $rows, DateTime $today, $expectedArrivalTime): array {
     $lateArrivalsCount = 0;
     $daysWorkedCount = 0;
     $officeSeconds = 0;
@@ -91,8 +91,8 @@ function calculateWorkedStats(array $rows, DateTime $today): array {
             $timeInCount++;
         }
 
-        $timeIn = strtotime($timeInStr);
-        $cutoff = strtotime($dateStr . ' 07:30:00');
+        $timeIn = strtotime($timeInStr); 
+        $cutoff = strtotime($dateStr . ' ' . $expectedArrivalTime);
         if ($timeIn > $cutoff) {
             $lateArrivalsCount++;
         }
@@ -247,7 +247,7 @@ function calculateStatistics(int $staffID): array {
     ['startDate' => $startDate, 'endDate' => $endDate] = getCurrentPayPeriod();
 
     $rows = getTimesheetRowsForPeriod($staffID, $startDate, $endDate);
-    $workedStats = calculateWorkedStats($rows, $today);
+    $workedStats = calculateWorkedStats($rows, $today, getExpectedArrivialTime($staffID));
 
     $personStats['daysWorked'] = $workedStats['daysWorked'];
     $personStats['lateArrivals'] = $workedStats['lateArrivals'];
