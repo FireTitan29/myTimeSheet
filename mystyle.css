@@ -29,8 +29,8 @@ textarea:focus {
     --darkRedColor: rgb(190, 35, 60);
     --extraLightRedColor: rgb(255, 224, 229);
 
-    --lightAmber: #fff4e5;      /* very soft amber background */
-    --amber: #9a4d00;   /* warm brown-orange text */
+ --lightAmber: #fff6db;   /* soft warm yellow (sunlight on white) */
+--amber: #c47a00;       /* clean golden amber (not brown) */
 
     --extraLargeFont: 1.75rem;
     --largeFont: 1.25rem;
@@ -746,7 +746,7 @@ nav {
 
 .block-holder-staff {
     margin-top: 20px;
-    margin-left: 10px;
+    margin-left: 25px;
     border: solid;
     padding-left: 20px;
     padding-top: 20px;
@@ -913,7 +913,7 @@ nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    max-width: 580px;
+    max-width: 650px;
 }
 
 .in-out-person {
@@ -926,10 +926,33 @@ nav {
     border-radius: 2px;
 }
 
+.in-out-person.on-leave-colors {
+    color: var(--amber);
+    background-color: var(--lightAmber);
+}
+
+.in-out-person.on-leave-colors .timeout-dashboard {
+    color: var(--amber);
+}
+
+.in-out-person.on-leave-colors:hover {
+    box-shadow: inset 4px 0 0 var(--amber);
+}
+
+.in-out-person.in-person.clockedOut-colors {
+    background: var(--lightGrayColor);
+    /* color: var(--darkGrayColor); */
+}
+
+.in-out-person.in-person.clockedOut-colors:hover {
+    box-shadow: inset 4px 0 0 var(--darkGrayColor);
+}
+
 .in-person {
     background-color: var(--lightColor);
     color: var(--darkColor);
 }
+
 
 .in-person:hover {
     box-shadow: inset 4px 0 0 var(--mainColor);
@@ -964,8 +987,8 @@ nav {
     flex-direction: column;
     border-radius: 5px;
     border-color: var(--mainColor);
-    width: 260px;
-    margin-right: 10px;
+    width: 450px;
+    margin-right: 20px;
 }
 
 .block-holder-today-overview {
@@ -981,6 +1004,7 @@ nav {
     border-color: var(--grayColor);
     width: 550px;
     height: 150px;
+    /* margin-left: 20px; */
 }
 
 .late-pill {

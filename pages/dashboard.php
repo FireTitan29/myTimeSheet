@@ -60,7 +60,7 @@ if (!defined('APP_RUNNING')) {
                 <?php foreach ($staff as $person): ?>
                     <?php if (!$person['timeOut'] && !$person['timeIn']): ?>
                         <a style="text-decoration: none; cur" href="index.php?view=staffmanagement&staffMember=<?= $person['staffID'] ?>">
-                            <label class="in-out-person out-person">
+                            <label class="in-out-person out-person <?php if ($person['is_leave'] === 1) echo 'on-leave-colors'?>">
                                 <?= $person['staffName'] ?><br>
                                 <?php if ($person['is_leave'] === 1): ?>
                                     <span class="timeout-dashboard"><?= ucwords($person['leave_type']) ?> Leave</span>
@@ -72,7 +72,7 @@ if (!defined('APP_RUNNING')) {
                         </a>
                     <?php elseif ($person['timeOut'] && $person['timeIn']): ?>
                         <a style="text-decoration: none;" href="index.php?view=staffmanagement&staffMember=<?= $person['staffID'] ?>">
-                            <label class="in-out-person in-person">
+                            <label class="in-out-person in-person clockedOut-colors">
                                 <?php include 'components/dashboardPopUp.php'; ?>
                                 <?= $person['staffName'] ?><br>
                                 <span class="timein-dashboard">Clocked Out: <?= date('H:i', strtotime($person['timeOut'])); ?></span>

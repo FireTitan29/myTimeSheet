@@ -65,7 +65,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Healthy Pet: <?= $page ?></title>
-    <link rel="stylesheet" href="mystyle.css?v=7">
+    <link rel="stylesheet" href="mystyle.css?v=8">
     <link rel="icon" type="image/x-icon" href="images/icons/staff_management_icon.svg">
 </head>
 <body <?php if ($view === 'stafflogin') echo 'style="justify-content: center;"'?>>
