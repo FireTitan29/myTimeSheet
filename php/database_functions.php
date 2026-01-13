@@ -160,7 +160,8 @@
                 t.staff_comment_late,
                 t.management_comment,
                 t.is_leave,
-                l.leave_type
+                l.leave_type,
+                l.day_type
             FROM staff s
             LEFT JOIN timesheet t
                 ON t.staffID = s.staffID

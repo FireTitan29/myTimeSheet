@@ -63,7 +63,7 @@ if (!defined('APP_RUNNING')) {
                             <label class="in-out-person out-person <?php if ($person['is_leave'] === 1) echo 'on-leave-colors'?>">
                                 <?= $person['staffName'] ?><br>
                                 <?php if ($person['is_leave'] === 1): ?>
-                                    <span class="timeout-dashboard"><?= ucwords($person['leave_type']) ?> Leave</span>
+                                    <span class="timeout-dashboard"><?= ucwords($person['leave_type']) ?> Leave <?php if ($person['day_type'] === 'half') echo '(Half Day)' ?></span>
                                 <?php else: ?>
                                 <span class="timeout-dashboard">Not Clocked In</span>
                                 <?php endif;?>
