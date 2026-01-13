@@ -1,3 +1,19 @@
+/* Disable ALL hover effects on touch devices (global, not nested) */
+@media (hover: none) and (pointer: coarse) {
+  *:hover {
+    background: inherit !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+  }
+
+  *:hover::before,
+  *:hover::after {
+    opacity: 0 !important;
+    display: none !important;
+  }
+}
+
 @media (max-width: 900px) {
 
   html {
@@ -8,14 +24,6 @@
     border-width: 0.5px;
   }
 
-
-  /* Disable hover effects on touch devices */
-  @media (hover: none) and (pointer: coarse) {
-    .nav-icon-label:hover {
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-  }
 
   :root {
     --smallFont: 0.85rem;
@@ -98,11 +106,6 @@
   .nav-icon-label {
     background: transparent !important;
     box-shadow: none !important;
-  }
-
-  .nav-icon-label:hover {
-    background: rgba(0,0,0,0.05);
-    box-shadow: none;
   }
 
   .nav-icon-label.active,
@@ -318,11 +321,4 @@
   }
 
   
-  /* Disable hover effects on touch devices */
-    @media (hover: none) and (pointer: coarse) {
-      .nav-icon-label:hover {
-        background: transparent !important;
-        box-shadow: none !important;
-    }
-    }
 }
