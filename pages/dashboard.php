@@ -41,7 +41,8 @@ if (!defined('APP_RUNNING')) {
                             <?php 
                                 $in++; 
                                 $timeIn = strtotime($person['timeIn']);
-                                $cutoff = strtotime(date('Y-m-d', strtotime($person['timeIn'])) . ' 07:30:00');
+                                $expectedArrivalTime = getExpectedArrivialTime($person['staffID']);
+                                $cutoff = strtotime(date('Y-m-d', strtotime($person['timeIn'])) . ' ' .$expectedArrivalTime);
                                 $isLate = $timeIn > $cutoff;
 
                                 if ($isLate) {
