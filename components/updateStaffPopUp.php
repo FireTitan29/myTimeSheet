@@ -56,9 +56,8 @@
                 </div>
                 <input type="hidden" name="updateStaffMember" value="true">
                 <input type="hidden" name="staffID" value="<?= $id ?>">
-                <div class="input-section" style="margin-bottom: 15px; margin-top:15px">
+                <div class="input-section buttons-input-mobile" style="margin-bottom: 15px; margin-top:15px">
                     <button class="form-button" type="submit">Submit</button>
-                    <span style="margin-right: 5px;"></span>
                     <button class="form-button" type="button" onclick="closeUpdateForm()">Cancel</button>
                 </div>
             </form>

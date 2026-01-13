@@ -48,7 +48,7 @@
                 </div>
 
                 <input type="hidden" name="addStaffMember" value="true">
-                <div class="input-section" style="margin-bottom: 15px; margin-top:15px">
+                <div class="input-section buttons-input-mobile" style="margin-bottom: 15px; margin-top:15px">
                     <button class="form-button" type="submit">Submit</button>
                     <button class="form-button" type="button" onclick="closeForm()">Cancel</button>
                 </div>

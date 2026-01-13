@@ -1,0 +1,307 @@
+@media (max-width: 900px) {
+
+  html {
+    font-size: 18px;
+  }
+
+  :root {
+    --smallFont: 0.85rem;
+
+    --extraLargeFont: 1.5rem;
+    --largeFont: 1.15rem;
+    --mediumFont: 1.1rem;
+    --normalFont: 1rem;
+  }
+
+  body {
+    display: block;
+    padding-bottom: 150px;
+  }
+
+  nav {
+    position: fixed;
+    height: auto;
+    min-height: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+    box-shadow: rgba(0,0,0,0.1) 0 3px 5px;
+    z-index: 1000;
+  }
+
+  h3 {
+    text-align: center;
+  }
+  
+  span.small-gray-role-text {
+    display: block;
+    text-align: center;
+    margin-left: 0px;
+    
+  }
+
+  span {
+    text-align: center;
+  }
+
+  .nav-form {
+    flex-direction: row;
+    gap: 18px;
+  }
+
+  .nav-icon-label {
+    padding: 10px;
+    border-radius: 50%;
+  }
+
+  .nav-icon-svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Give space for the bar */
+  .content-holder {
+    margin-left: 0;
+    padding: 0;
+    padding-top: 80px;
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+    box-sizing: border-box;
+  }
+
+  .nav-icon-label {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .nav-icon-label:hover {
+    background: rgba(0,0,0,0.05);
+    box-shadow: none;
+  }
+
+  .nav-icon-label.active,
+  .nav-icon-label.selected {
+    background: rgba(1,151,246,0.15); /* soft glow instead of bar */
+    box-shadow: none !important;
+    background-color: var(--lightGrayColor);
+  }
+
+.nav-icon-label::after {
+  content: attr(data-tip);
+  position: absolute;
+
+  left: 50%;
+  transform: translate(-50%, 90%);
+
+  background-color: var(--extraDarkColor);
+  color: white;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: rgba(0,0,0,0.2) 0px 4px 10px;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s linear;
+}
+
+  .block-holder {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 420px;
+    /* margin: 20px auto 130px auto; */
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .block-holder-staff {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 420px;
+    min-height: fit-content;
+    margin: 0px;
+    padding: 15px;
+    padding-bottom: 20px;
+    margin-top: 25px;
+    box-sizing: border-box;
+    align-items: stretch;
+  }
+  
+  .staffmanagment-holder {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Clamp inner contact card */
+  .staff-info-contact-div {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Make the stats grid wrap instead of forcing 4-in-a-row */
+  .squares-holder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+
+
+  /* Two columns on mobile */
+  .square-block {
+    width: calc(40% - 12px);
+    margin-right: 0;
+    box-sizing: border-box;
+  }
+
+  .staff-radio-block {
+    width: 96%;
+  }
+
+  .staff-info-button-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .staff-info-button {
+    width: 150px;
+  }
+
+
+  .staff-info-button-red {
+    display: none;
+    padding: 4px;
+  }
+
+  .info-panel-heading {
+    display: block;
+    text-align: center;
+  }
+
+  .punctuality-badges {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .badge {
+    width: 80px;
+    border-radius: 10px;
+    gap: 5px;
+  }
+
+  .contact-p {
+    text-align: center;
+  }
+
+  .highlight-span {
+    display: block;
+    text-align: center;
+  }
+
+  /* Forms */
+  .form-text-input-name {
+      box-sizing: border-box;
+      height: 30px;
+      width: 100%;
+  }
+
+  .optionBox {
+    width: 100%;
+    text-align: center;
+  }
+
+  .buttons-input-mobile {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .form-text-input-email {
+    width: 100%;
+  }
+
+
+  /* Stack the two dashboard panels vertically */
+  .dashboard-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+
+  }
+
+  .block-holder-today-overview {
+    width: fit-content;
+    height: fit-content;
+    margin-bottom: 100px;
+  }
+
+  .block-header-mobile {
+    margin-top: 20px;
+  }
+
+
+  .small-gray-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    text-align: center;
+    margin-top: 0px;
+  }
+
+  #last-updated {
+    display: inline;
+    width: auto;
+  }
+
+  /* Each panel should fill the phone width */
+  .block-holder-dashboard {
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+  }
+
+  /* Ensure cards inside fit the width */
+  .in-out-person {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  /* Parent should not force rows */
+  .entire-block-dashboard {
+    display: flex;
+    flex-direction: column;
+  }
+}
+  

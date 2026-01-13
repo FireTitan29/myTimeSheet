@@ -25,7 +25,7 @@ if (!defined('APP_RUNNING')) {
 
 <div class="entire-block-dashboard">
     <div style="margin-bottom:20px;">
-        <h3 class="block-header">Dashboard</h3>
+        <h3 class="block-header block-header-mobile">Dashboard</h3>
         <!-- In-->
         <div class="dashboard-holder">
             <div class="block-holder-dashboard">
@@ -93,7 +93,7 @@ if (!defined('APP_RUNNING')) {
     <div class="dashboard-holder">
         <div class="block-holder-today-overview">
             <h3 class="block-header">Today's Overview</h3>
-            <div style="display: flex; flex-direction: row;">
+            <div class="squares-holder">
                 <div class="square-block">
                         <p class="small-text-square-block">Total Staff</p>
                         <p class="large-text-square-block"><?= sizeof($staff) ?></p>
