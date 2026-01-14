@@ -741,7 +741,7 @@ nav {
 
 .small-gray-text {
     margin-top: 10px;
-    color: var(--darkGrayColor);
+    color: var(--extraDarkGrayColor);
     font-size: var(--smallFont);
 }
 
@@ -778,7 +778,7 @@ nav {
 }
 
 .small-gray-role-text {
-    color: var(--darkGrayColor);
+    color: var(--extraDarkGrayColor);
     font-size: var(--normalFont);
 }
 
@@ -1000,7 +1000,7 @@ nav {
 }
 
 .block-holder-today-overview {
-    background-color: #fafafa;
+    background-color: var(--extraLightGrayColor);
     padding: 20px 10px;
     padding-left: 20px;
     display: flex;
