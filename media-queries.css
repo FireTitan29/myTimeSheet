@@ -1,15 +1,11 @@
-/* === Touch devices: disable all hover + tooltips === */
+/* === Touch devices: disable hover + tooltips safely === */
 @media (hover: none), (pointer: coarse) {
   * {
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
   }
 
-  *:hover {
-    background: inherit !important;
-    box-shadow: none !important;
-    color: inherit !important;
-  }
-
+  /* Kill all tooltip UI */
   .dashboard-popup,
   .nav-icon-label::after,
   .commentLabel::after,
@@ -20,62 +16,8 @@
     opacity: 0 !important;
     pointer-events: none !important;
   }
-}
 
-/* Hard-disable hover-based UI on touch devices */
-@media (hover: none), (pointer: coarse) {
-
-  /* Kill tap highlight + active flash on mobile */
-  * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-   .mobile-page-top {
-    background: white !important;
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  *:focus,
-  *:focus-visible {
-    outline: none !important;
-  }
-
-  *:hover {
-    background: inherit !important;
-    color: inherit !important;
-    box-shadow: none !important;
-    text-decoration: none !important;
-  }
-
-  *:hover::before,
-  *:hover::after {
-    opacity: 0 !important;
-    display: none !important;
-  }
-
-    .in-out-person.in-person:hover .dashboard-popup {
-        opacity: 0 !important;
-        display: none !important;
-        pointer-events: none !important;
-    }
-  
-  /* Kill all tooltips */
-  .nav-icon-label::after,
-  .commentLabel::after,
-  .publicHoliday-td::after,
-  .publicHoliday-td::before,
-  .form-button-circle::after,
-  .dashboard-popup {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* Kill row & button hover visuals */
+  /* Disable hover shadows & highlights without destroying backgrounds */
   tr:hover,
   .nav-icon-label:hover,
   .staff-radio-block:hover,
@@ -86,12 +28,10 @@
   .in-person:hover,
   .out-person:hover,
   .doctor-radio-holder:hover span {
-    background: inherit !important;
     box-shadow: none !important;
-    color: inherit !important;
   }
 
-  /* Kill hover arrows */
+  /* Prevent hover arrows changing color */
   tr[data-has-expand="1"] td:first-child::after {
     color: #888 !important;
   }
