@@ -378,11 +378,11 @@
   /* === Mobile calendar-style table (condensed, still a table) === */
   .table-scroll {
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;              /* allow vertical scrolling */
     -webkit-overflow-scrolling: touch;
     position: relative;
     width: 100%;
-    touch-action: pan-x;
+    touch-action: auto;            /* allow vertical pan */
   }
 
   .table-scroll .mobile-page-top {
@@ -397,7 +397,7 @@
   }
 
   .table-scroll table {
-    margin-top: 130px;
+    margin-top: 0;
     border-collapse: separate;
     border-spacing: 0;
     width: max-content;
