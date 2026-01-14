@@ -18,11 +18,12 @@ textarea:focus {
     --lightColor: rgb(194, 231, 255);
     --extraLightColor: rgb(230, 245, 255);
     
-    --extraLightGrayColor: #fafafa;
-    --grayColor: rgb(229, 229, 229);
-    --darkGrayColor: rgb(180, 180, 180);
-    --extraDarkGrayColor: rgb(117, 117, 117);
-    --lightGrayColor: #f2f2f2;
+    --extraLightGrayColor: #f8fafc;  /* panel backgrounds */
+    --lightGrayColor:     #f1f5f9;  /* zebra rows, soft fills */
+    --grayColor:          #e2e8f0;  /* borders, dividers */
+    --darkGrayColor:      #cbd5e1;  /* subtle outlines */
+    --extraDarkGrayColor: #64748b;  /* secondary text */
+    
 
     --redColor: rgb(239, 35, 60);
     --lightRedColor: rgb(255, 199, 206);
@@ -73,7 +74,7 @@ table {
     border-radius: 8px;
     overflow: hidden;
     width: 100%;
-    max-width: 100%;
+    max-width: 99%;
 }
 
 /* Round the 4 outer corners of the table */
@@ -153,16 +154,17 @@ th:last-child {
 
 
 .weekDay {
-    background-color: var(--grayColor);
+    background-color: var(--lightGrayColor);
+    color: var(--extraDarkGrayColor);
 }
 
-/* Zebra striping */
+/* Zebra striping – mobile & desktop unified */
 tr:not(.isLate):not(.today):not(.weekDay):nth-child(even) {
-  background-color: #f7f7f7;
+  background-color: #f8fafc;   /* very light slate */
 }
 
 tr:not(.isLate):not(.today):not(.weekDay):nth-child(odd) {
-  background-color: #ffffff;
+  background-color: #ffffff;  /* keep pure white */
 }
 
 /* Hover LAST */

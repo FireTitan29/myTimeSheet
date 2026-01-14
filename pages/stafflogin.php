@@ -17,7 +17,7 @@ if (!defined('APP_RUNNING')) {
         <form action="" method="POST" class="clock-in-form" id="clockInForm">
             <input type="hidden" name="clockInClockOut" value="1">
             <span class="error" id='error-pin'><?php if (isset($errors['pin'])) echo $errors['pin']; ?></span>
-            <label for="" class="clock-in-tool-pin">Enter your pin</label>
+            <label class="clock-in-tool-pin">Enter your pin</label>
                 <div class="pin-input-row" aria-label="4 digit PIN">
                     <input
                         type="text"

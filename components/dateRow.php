@@ -241,39 +241,3 @@
 <?php endif;?>
 </td>
 </tr>
-
-<script>
-function toggleRow(event, row) {
-    // Do not toggle row when clicking interactive elements,
-    // EXCEPT for "View comments" preview buttons
-    if (
-        event.target.closest('.commentLabel') ||
-        event.target.closest('.leave-preview') ||
-        (event.target.closest('button') && !event.target.closest('.toggle-comments'))
-    ) {
-        return;
-    }
-
-    if (row.dataset.hasExpand !== '1') {
-        return;
-    }
-
-    const isOpen = row.classList.contains('row-open');
-
-    // Expanded content blocks
-    const contentBlocks = row.querySelectorAll('.comments-content, .comment-block');
-
-    // Collapsed preview elements (titles, truncated text, view buttons)
-    const previewBlocks = row.querySelectorAll('.row-preview');
-
-    contentBlocks.forEach(block => {
-        block.style.display = isOpen ? 'none' : 'block';
-    });
-
-    previewBlocks.forEach(el => {
-        el.style.display = isOpen ? '' : 'none';
-    });
-
-    row.classList.toggle('row-open', !isOpen);
-}
-</script>

@@ -1,5 +1,50 @@
-/* Disable ALL hover effects on touch devices (global, not nested) */
-@media (hover: none) and (pointer: coarse) {
+/* === Touch devices: disable all hover + tooltips === */
+@media (hover: none), (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *:hover {
+    background: inherit !important;
+    box-shadow: none !important;
+    color: inherit !important;
+  }
+
+  .dashboard-popup,
+  .nav-icon-label::after,
+  .commentLabel::after,
+  .publicHoliday-td::after,
+  .publicHoliday-td::before,
+  .form-button-circle::after {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Hard-disable hover-based UI on touch devices */
+@media (hover: none), (pointer: coarse) {
+
+  /* Kill tap highlight + active flash on mobile */
+  * {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+   .mobile-page-top {
+    background: white !important;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+  }
+
+  *:focus,
+  *:focus-visible {
+    outline: none !important;
+  }
+
   *:hover {
     background: inherit !important;
     color: inherit !important;
@@ -12,6 +57,45 @@
     opacity: 0 !important;
     display: none !important;
   }
+
+    .in-out-person.in-person:hover .dashboard-popup {
+        opacity: 0 !important;
+        display: none !important;
+        pointer-events: none !important;
+    }
+  
+  /* Kill all tooltips */
+  .nav-icon-label::after,
+  .commentLabel::after,
+  .publicHoliday-td::after,
+  .publicHoliday-td::before,
+  .form-button-circle::after,
+  .dashboard-popup {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Kill row & button hover visuals */
+  tr:hover,
+  .nav-icon-label:hover,
+  .staff-radio-block:hover,
+  .delete-button:hover,
+  .form-button:hover,
+  .stamp-button:hover,
+  .clock-in-radio:hover,
+  .in-person:hover,
+  .out-person:hover,
+  .doctor-radio-holder:hover span {
+    background: inherit !important;
+    box-shadow: none !important;
+    color: inherit !important;
+  }
+
+  /* Kill hover arrows */
+  tr[data-has-expand="1"] td:first-child::after {
+    color: #888 !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -20,8 +104,17 @@
     font-size: 18px;
   }
 
-  * {
-    border-width: 0.5px;
+
+  /* Normalize borders on mobile without sub‑pixel rendering issues */
+  .block-holder,
+  .block-holder-staff,
+  .block-holder-dashboard,
+  .block-holder-today-overview,
+  table,
+  th,
+  td,
+  .square-block {
+    border-width: 1px;
   }
 
 
@@ -320,5 +413,175 @@
     flex-direction: column;
   }
 
+  .mobile-table-holder {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
   
+  .mobile-page-whole-table {
+    margin-top: 20px;
+  }
+
+  .mobile-date {
+    width: 35%;
+  }
+
+  .mobile-page-top {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  
+  /* === Mobile calendar-style table (condensed, still a table) === */
+  .table-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    width: 100%;
+    touch-action: pan-x;
+  }
+
+  .table-scroll .mobile-page-top {
+    position: fixed;
+    top: 30px; /* below the fixed mobile nav */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+    background: white;
+    width: 100%;
+    padding-top: 45px;
+  }
+
+  .table-scroll table {
+    margin-top: 130px;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max-content;
+    min-width: 100%;
+    position: relative;
+    padding-bottom: 20px;
+  }
+
+  .table-scroll th,
+  .table-scroll td {
+    padding: 6px 6px;
+    font-size: 0.85rem;
+    min-width: 80px;
+    white-space: nowrap;
+    background: white;
+    text-align: center;
+  }
+
+  /* Sticky header */
+  .table-scroll th {
+    position: sticky;
+    top: 0;
+    z-index: 11;
+    background: var(--mainColor);
+    color: white;
+  }
+
+  /* Sticky DATE column */
+  .table-scroll th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: var(--mainColor);
+    color: white;
+    min-width: 80px;
+    box-shadow: 1px 0 0 #2c7be5;
+  }
+
+  .table-scroll td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    background: white;
+    min-width: 80px;
+    box-shadow: 1px 0 0 #ddd;
+  }
+
+  /* Sticky DAY column */
+  .table-scroll th:nth-child(2) {
+    position: sticky;
+    left: 80px;
+    z-index: 10;
+    background: var(--mainColor);
+    color: white;
+    min-width: 90px;
+    box-shadow: 1px 0 0 #2c7be5;
+  }
+
+  .table-scroll td:nth-child(2) {
+    position: sticky;
+    left: 80px;
+    z-index: 7;
+    background: white;
+    min-width: 90px;
+    box-shadow: 1px 0 0 #ddd;
+  }
+
+  /* Time columns */
+  .table-scroll th:nth-child(3),
+  .table-scroll td:nth-child(3),
+  .table-scroll th:nth-child(4),
+  .table-scroll td:nth-child(4) {
+    min-width: 85px;
+  }
+
+  /* Comments & leave columns */
+  .table-scroll .comments,
+  .table-scroll .staff-comments {
+    min-width: 140px !important;
+  }
+
+  /* Weekend & today styling */
+  .table-scroll tr.weekDay td {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+
+  .table-scroll tr.today td {
+    background: var(--lightColor);
+  }
+
+  /* Blue indicator only on the first (Date) cell for today */
+  .table-scroll tr.today td:first-child {
+    box-shadow: inset 4px 0 0 var(--mainColor);
+  }
+}
+
+
+@media (max-width: 900px) {
+
+  /* Management & Staff comment buttons only */
+  td.comments .comment-button,
+  td.staff-comments .comment-button {
+    font-size: 0;
+  }
+
+  td.comments .comment-button::before,
+  td.staff-comments .comment-button::before {
+    content: "📝";
+    font-size: 18px;
+    display: inline-block;
+  }
+
+  /* Leave column only */
+  td.leave-preview,
+  td.leave-preview a,
+  td.leave-preview span {
+    font-size: 0;
+  }
+
+  td.leave-preview::before {
+    content: "🗂️";
+    font-size: 18px;
+    display: inline-block;
+  }
 }

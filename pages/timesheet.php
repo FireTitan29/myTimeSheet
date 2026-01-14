@@ -62,36 +62,39 @@ if (!defined('APP_RUNNING')) {
 
 ?>
 <?php if ($role === 'admin'): ?>
-<form method="GET">
-    <input type="hidden" name="view" value="table">
-    <!-- Fixes bug when user is selected, the month & year changes back to Latest instead of selected month -->
-    <input type="hidden" name="month" value="<?=
-        isset($_GET['month'])
-            ? htmlspecialchars($_GET['month'])
-            : htmlspecialchars($monthNameStr)
-    ?>">
+<div class="mobile-table-holder table-scroll">
+<div class="mobile-page-top">
+    <form method="GET">
+        <input type="hidden" name="view" value="table">
+        <!-- Fixes bug when user is selected, the month & year changes back to Latest instead of selected month -->
+        <input type="hidden" name="month" value="<?=
+            isset($_GET['month'])
+                ? htmlspecialchars($_GET['month'])
+                : htmlspecialchars($monthNameStr)
+        ?>">
 
-    <input type="hidden" name="year" value="<?=
-        isset($_GET['year'])
-            ? (int)$_GET['year']
-            : (int)$year
-    ?>">
-    <label for="name"> Select Staff Member<br>
+        <input type="hidden" name="year" value="<?=
+            isset($_GET['year'])
+                ? (int)$_GET['year']
+                : (int)$year
+        ?>">
+        <label for="name"> Select Staff Member<br>
 
-        <select class="optionBox-person" name="name" id="name" onchange="this.form.submit()">
-            <option hidden default <?php if (!isset($person)) {echo "selected";}?>><?php if ($person) {echo $person;} else {echo 'None';}?></option>
-            <?php foreach (getAllStaffNames() AS $name):?>
-                <option <?php if ($person === $name) echo 'selected' ?>><?php echo htmlspecialchars($name) ?></option>
-            <?php endforeach; ?>
-        </select>
-    </label>
-</form>
+            <select class="optionBox-person" name="name" id="name" onchange="this.form.submit()">
+                <option hidden default <?php if (!isset($person)) {echo "selected";}?>><?php if ($person) {echo $person;} else {echo 'None';}?></option>
+                <?php foreach (getAllStaffNames() AS $name):?>
+                    <option <?php if ($person === $name) echo 'selected' ?>><?php echo htmlspecialchars($name) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+    </form>
+
 <?php endif; ?>
 <!-- Seleting the Month for the Table -->
 <form class="date-holder" method="GET">
     <input type="hidden" name="view" value="table">
     <label for="month">
-        <select class="optionBox" name="month" id="month" onchange="this.form.submit()">
+        <select class="optionBox mobile-date" name="month" id="month" onchange="this.form.submit()">
             <option hidden disabled selected>
                 <?php echo $monthNameStr ?: date('F'); ?>
             </option>
@@ -106,6 +109,7 @@ if (!defined('APP_RUNNING')) {
     </label>
     <input class="yearInput" type="number" name="year" value="<?= $year?>" onchange="this.form.submit()">
 </form>
+</div>
 <table>
     <tr>
         <th>Date</th>
@@ -118,6 +122,43 @@ if (!defined('APP_RUNNING')) {
     </tr>
     <?php fillTable($month, $year, $person);?>
 </table>
+</div>
 <?php include 'components/commentPopUp.php'; ?>
 <?php include 'components/leavePopUp.php'; ?>
 <?php include 'components/leaveDetailsPopUp.php'; ?>
+
+<script>
+function toggleRow(event, row) {
+    // Do not toggle row when clicking interactive elements,
+    // EXCEPT for "View comments" preview buttons
+    if (
+        event.target.closest('.commentLabel') ||
+        event.target.closest('.leave-preview') ||
+        (event.target.closest('button') && !event.target.closest('.toggle-comments'))
+    ) {
+        return;
+    }
+
+    if (row.dataset.hasExpand !== '1') {
+        return;
+    }
+
+    const isOpen = row.classList.contains('row-open');
+
+    // Expanded content blocks
+    const contentBlocks = row.querySelectorAll('.comments-content, .comment-block');
+
+    // Collapsed preview elements (titles, truncated text, view buttons)
+    const previewBlocks = row.querySelectorAll('.row-preview');
+
+    contentBlocks.forEach(block => {
+        block.style.display = isOpen ? 'none' : 'block';
+    });
+
+    previewBlocks.forEach(el => {
+        el.style.display = isOpen ? '' : 'none';
+    });
+
+    row.classList.toggle('row-open', !isOpen);
+}
+</script>
