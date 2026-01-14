@@ -397,7 +397,7 @@
   }
 
   .table-scroll table {
-    margin-top: 0;
+    margin-top: 140px;
     border-collapse: separate;
     border-spacing: 0;
     width: max-content;
