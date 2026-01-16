@@ -84,7 +84,12 @@
             $prevMonth = 12;
             $prevYear--;
         }
-        $periodPublicHolidays = getYearPublicHolidays($year);
+
+        
+        $periodPublicHolidays = array_merge(
+            getYearPublicHolidays($prevYear),
+            getYearPublicHolidays($year)
+        );
         // How many days in the previous month?
         $daysInPrev = cal_days_in_month(CAL_GREGORIAN, $prevMonth, $prevYear);
 
@@ -207,19 +212,22 @@
         return (bool)$stmt->fetchColumn();
     }
 
-    function getYearPublicHolidays($date) {
-        $year = date('Y', strtotime($date));
-
+    function getYearPublicHolidays(int $year) {
         $pdo = connectToDatabase();
+
         $stmt = $pdo->prepare(
             'SELECT holiday_date, name
-             FROM public_holiday
-             WHERE YEAR(holiday_date) = :year
-             AND country_code = \'ZA\'
-             ORDER BY holiday_date ASC'
+            FROM public_holiday
+            WHERE YEAR(holiday_date) IN (:year, :yearPlusOne)
+            AND country_code = \'ZA\'
+            ORDER BY holiday_date ASC'
         );
 
-        $stmt->execute([':year' => $year]);
+        $stmt->execute([
+            ':year' => $year,
+            ':yearPlusOne' => $year + 1
+        ]);
+
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         closeDatabase($pdo);
 

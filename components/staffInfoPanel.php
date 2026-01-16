@@ -70,9 +70,14 @@
             <div class="squares-holder">
 
                 <div class="square-block">
-                    <p class="small-text-square-block" style="">Annual Leave Accrude</p>
-                    <p class="large-text-square-block"><?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?> <span class="small-text-square-block">/ 15</span></p>
+                    <p class="small-text-square-block">Annual Leave</p>
+                    <p class="large-text-square-block"><?= $leaveDaysRemaining['annual'] ?> <span class="small-text-square-block">/ <?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?></span></p>
                 </div>
+
+                <!-- <div class="square-block">
+                    <p class="small-text-square-block" style="">Annual Accrude</p>
+                    <p class="large-text-square-block"> <span class="small-text-square-block">/ 15</span></p>
+                </div> -->
                 
                 <div class="square-block">
                     <p class="small-text-square-block">Sick Leave</p>
