@@ -189,22 +189,38 @@ function calculateDaysMissed(
 function calculateAnnualLeaveDays(int $staffID): float {
     $pdo = connectToDatabase();
 
-    // Count PAID service days YTD (worked days + paid leave days)
+    // Count PAID service days YTD:
+    // - Worked days
+    // - Paid leave days
+    // - Public holidays
     $stmt = $pdo->prepare(
-        "SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
-         FROM timesheet t
-         LEFT JOIN staff_leave sl
-           ON sl.leave_id = t.leave_id
-         WHERE t.staffID = :staffID
-           AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
-           AND t.date <= CURDATE()
-           AND (
-                t.timeIn IS NOT NULL
-                OR (
-                    t.is_leave = 1
-                    AND sl.leave_type IN ('annual', 'sick', 'family')
-                )
-           )"
+        "SELECT ROUND(COUNT(DISTINCT service_date) / 17, 2)
+         FROM (
+             -- Worked days + paid leave days
+             SELECT t.date AS service_date
+             FROM timesheet t
+             LEFT JOIN staff_leave sl
+               ON sl.leave_id = t.leave_id
+             WHERE t.staffID = :staffID
+               AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
+               AND t.date <= CURDATE()
+               AND (
+                    t.timeIn IS NOT NULL
+                    OR (
+                        t.is_leave = 1
+                        AND sl.leave_type IN ('annual', 'sick', 'family')
+                    )
+               )
+
+             UNION
+
+             -- Public holidays
+             SELECT ph.holiday_date AS service_date
+             FROM public_holiday ph
+             WHERE ph.country_code = 'ZA'
+               AND ph.holiday_date >= MAKEDATE(YEAR(CURDATE()), 1)
+               AND ph.holiday_date <= CURDATE()
+         ) service_days"
     );
 
     $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
@@ -214,6 +230,7 @@ function calculateAnnualLeaveDays(int $staffID): float {
     // Cap annual leave accrual at 15 days
     $leaveAccrued = min($leaveAccrued, 15);
 
+    // Get current leave balance
     $stmt = $pdo->prepare(
         'SELECT leave_balance
          FROM staff
