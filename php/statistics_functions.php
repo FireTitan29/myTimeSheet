@@ -189,22 +189,33 @@ function calculateDaysMissed(
 function calculateAnnualLeaveDays(int $staffID): float {
     $pdo = connectToDatabase();
 
+    // Count PAID service days YTD (worked days + paid leave days)
     $stmt = $pdo->prepare(
-        'SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
+        "SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
          FROM timesheet t
+         LEFT JOIN staff_leave sl
+           ON sl.staffID = t.staffID
+          AND sl.leave_date = t.date
          WHERE t.staffID = :staffID
-           AND t.timeIn IS NOT NULL
-           AND t.is_leave = 0
            AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
-           AND t.date <= CURDATE()'
+           AND t.date <= CURDATE()
+           AND (
+                t.timeIn IS NOT NULL
+                OR (
+                    t.is_leave = 1
+                    AND sl.leave_type IN ('Annual', 'Sick', 'Family')
+                )
+           )"
     );
 
     $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
     $stmt->execute();
-    $leaveAccrued = (float) $stmt->fetchColumn();
+    $leaveAccrued = (float)$stmt->fetchColumn();
 
+    // Cap annual leave accrual at 15 days
     $leaveAccrued = min($leaveAccrued, 15);
 
+    // Get current leave balance
     $stmt = $pdo->prepare(
         'SELECT leave_balance
          FROM staff
@@ -213,23 +224,11 @@ function calculateAnnualLeaveDays(int $staffID): float {
 
     $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
     $stmt->execute();
-    $leaveBalance = (float) $stmt->fetchColumn();
-
-    $stmt = $pdo->prepare(
-        'SELECT COALESCE(SUM(duration_days), 0)
-         FROM staff_leave
-         WHERE staffID = :staffID
-           AND leave_type = \'Annual\''
-    );
-
-    $stmt->bindValue(':staffID', $staffID, PDO::PARAM_INT);
-    $stmt->execute();
-    $leaveTaken = (float) $stmt->fetchColumn();
+    $leaveBalance = (float)$stmt->fetchColumn();
 
     closeDatabase($pdo);
-    
-    //  - $leaveTaken removed
-    return round(($leaveBalance + $leaveAccrued), 2);
+
+    return round($leaveBalance + $leaveAccrued, 2);
 }
 
 function calculateStatistics(int $staffID): array {
