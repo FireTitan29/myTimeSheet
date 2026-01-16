@@ -227,8 +227,9 @@ function calculateAnnualLeaveDays(int $staffID): float {
     $leaveTaken = (float) $stmt->fetchColumn();
 
     closeDatabase($pdo);
-
-    return round(($leaveBalance + $leaveAccrued) - $leaveTaken, 2);
+    
+    //  - $leaveTaken removed
+    return round(($leaveBalance + $leaveAccrued), 2);
 }
 
 function calculateStatistics(int $staffID): array {

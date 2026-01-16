@@ -488,7 +488,7 @@
     color: #64748b;
   }
 
-  .table-scroll tr.today td {
+  .table-scroll tr.today td:not(.isLate) {
     background: var(--lightColor);
   }
 
@@ -526,4 +526,15 @@
     font-size: 18px;
     display: inline-block;
   }
+
+  /* Base late cell */
+tr td.isLate {
+  background-color: var(--redColor);
+  color: white;
+}
+
+/* Alternate every second ROW */
+tr:nth-child(even) td.isLate {
+  background-color: var(--altRedColor);
+}
 }

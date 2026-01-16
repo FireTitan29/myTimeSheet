@@ -26,6 +26,7 @@ textarea:focus {
     
 
     --redColor: rgb(239, 35, 60);
+    --altRedColor: rgb(220, 30, 55);
     --lightRedColor: rgb(255, 199, 206);
     --darkRedColor: rgb(190, 35, 60);
     --extraLightRedColor: rgb(255, 224, 229);
@@ -234,9 +235,15 @@ tr[data-has-expand="1"] td {
     box-shadow: inset 4px 0 0 var(--mainColor);
 }
 
-.isLate {
-    background-color: var(--redColor);
-    color: white;
+/* Base late cell */
+tr td.isLate {
+  background-color: var(--redColor);
+  color: white;
+}
+
+/* Alternate every second ROW */
+tr:nth-child(even) td.isLate {
+  background-color: var(--altRedColor);
 }
 
 .date-holder {

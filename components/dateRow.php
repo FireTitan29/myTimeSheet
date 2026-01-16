@@ -36,7 +36,7 @@
 } ?> </td>
     <!-- Time in -->
 
-<td <?php if ($isLate) {echo "class='isLate'";} ?>>
+<td <?php if ($isLate && empty($staffRecord['leave_id'])) {echo "class='isLate'";} ?>>
     <?php if (isset($staffRecord['timeIn'])): ?>
         <?php echo date('H:i:s', strtotime($staffRecord['timeIn'])); ?>
     <?php else: ?>
