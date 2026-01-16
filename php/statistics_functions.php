@@ -194,8 +194,7 @@ function calculateAnnualLeaveDays(int $staffID): float {
         "SELECT ROUND(COUNT(DISTINCT t.date) / 17, 2)
          FROM timesheet t
          LEFT JOIN staff_leave sl
-           ON sl.staffID = t.staffID
-          AND sl.leave_date = t.date
+           ON sl.leave_id = t.leave_id
          WHERE t.staffID = :staffID
            AND t.date >= MAKEDATE(YEAR(CURDATE()), 1)
            AND t.date <= CURDATE()
@@ -203,7 +202,7 @@ function calculateAnnualLeaveDays(int $staffID): float {
                 t.timeIn IS NOT NULL
                 OR (
                     t.is_leave = 1
-                    AND sl.leave_type IN ('Annual', 'Sick', 'Family')
+                    AND sl.leave_type IN ('annual', 'sick', 'family')
                 )
            )"
     );
@@ -215,7 +214,6 @@ function calculateAnnualLeaveDays(int $staffID): float {
     // Cap annual leave accrual at 15 days
     $leaveAccrued = min($leaveAccrued, 15);
 
-    // Get current leave balance
     $stmt = $pdo->prepare(
         'SELECT leave_balance
          FROM staff
