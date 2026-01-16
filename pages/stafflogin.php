@@ -198,15 +198,22 @@ if (!defined('APP_RUNNING')) {
             if (hasSubmitted) return;
             hasSubmitted = true;
 
-            // requestSubmit triggers submit event + built-in constraint validation
+            // Submit first
             if (typeof form.requestSubmit === 'function') {
                 form.requestSubmit(hiddenSubmit || undefined);
             } else if (hiddenSubmit) {
                 hiddenSubmit.click();
             } else {
-                // last resort
                 form.submit();
             }
+
+            // Then clear visible inputs on the next frame
+            requestAnimationFrame(() => {
+                inputs.forEach(i => {
+                    i.value = '';
+                    i.blur();
+                });
+            });
         }
 
         form.addEventListener('submit', (e) => {

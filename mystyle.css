@@ -30,6 +30,7 @@ textarea:focus {
     --darkRedColor: rgb(190, 35, 60);
     --extraLightRedColor: rgb(255, 224, 229);
 
+    --extraLightAmber: #fff8e1;;   /* soft warm yellow (sunlight on white) */
  --lightAmber: #fff6db;   /* soft warm yellow (sunlight on white) */
 --amber: #c47a00;       /* clean golden amber (not brown) */
 
@@ -158,17 +159,22 @@ th:last-child {
     color: var(--extraDarkGrayColor);
 }
 
+.leaveDay-Row {
+    background-color:var(--extraLightAmber);
+    color: var(--amber);
+}
+
 /* Zebra striping – mobile & desktop unified */
-tr:not(.isLate):not(.today):not(.weekDay):nth-child(even) {
+tr:not(.isLate):not(.today):not(.leaveDay-Row):not(.weekDay):nth-child(even) {
   background-color: #f8fafc;   /* very light slate */
 }
 
-tr:not(.isLate):not(.today):not(.weekDay):nth-child(odd) {
+tr:not(.isLate):not(.today):not(.leaveDay-Row):not(.weekDay):nth-child(odd) {
   background-color: #ffffff;  /* keep pure white */
 }
 
 /* Hover LAST */
-tr:not(.isLate):not(.today):not(.weekDay):hover {
+tr:not(.isLate):not(.today):not(.leaveDay-Row):not(.weekDay):hover {
     background-color: var(--lightColor);
     box-shadow: inset 4px 0 0 var(--mainColor);
 }
@@ -1161,7 +1167,7 @@ nav {
 }
 
 .success-block {
-    animation: fadeSlideOut 1.4s ease-in-out 2s forwards;
+    animation: fadeSlideOut 3.5s ease-in-out 5s forwards;
 }
 
 /* Admin Page */

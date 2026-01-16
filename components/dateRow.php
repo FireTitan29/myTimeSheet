@@ -15,6 +15,8 @@
     <?php 
         if ($weekDay == 'Saturday' || $weekDay == 'Sunday' || $isPublicHoliday) { 
             echo "class='weekDay expandable-row'";
+        } else if (!empty($staffRecord['leave_id'])) {
+            echo "class='leaveDay-Row expandable-row'";  
         } else if ($calendarDate === $todayDate) {
             echo "class='today expandable-row'";
         } else {
