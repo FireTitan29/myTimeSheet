@@ -62,7 +62,7 @@
         <div class="leave-comment-block">
             <div style="margin-top: 10px;">
             </div>
-            <h3 class="squares-header">Leave remaining</h3>
+            <h3 class="squares-header">Leave Overview</h3>
             <!-- Leave Section -->
              <?php
                 $leaveDaysRemaining = leaveTaken($selectedPerson['staffID']);
@@ -70,8 +70,8 @@
             <div class="squares-holder">
 
                 <div class="square-block">
-                    <p class="small-text-square-block">Annual Leave</p>
-                    <p class="large-text-square-block"><?= 15-$leaveDaysRemaining['annual'] ?> <span class="small-text-square-block">/ 15</span></p>
+                    <p class="small-text-square-block" style="">Annual Leave Accrude</p>
+                    <p class="large-text-square-block"><?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?> <span class="small-text-square-block">/ 15</span></p>
                 </div>
                 
                 <div class="square-block">
@@ -87,7 +87,7 @@
             </div>
             <div style="margin-top: 20px;">
                 <p class="contact-p"><span class="highlight-span">Unpaid leave taken: </span><span class="dark-color"><?= $leaveDaysRemaining['unpaid'] ?> days</span></p>
-                <p class="contact-p"><span class="highlight-span">Annual Leave accrude YTD: </span><span class="dark-color"><?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?> days</span></p>
+                <!-- <p class="contact-p"><span class="highlight-span">Annual Leave accrude YTD: </span><span class="dark-color"><?= calculateAnnualLeaveDays($selectedPerson['staffID']) ?> days</span></p> -->
             </div>
         </div>
     </div>
