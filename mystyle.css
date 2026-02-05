@@ -1570,6 +1570,23 @@ body.admin-login-page {
     margin-bottom: 10px;
 }
 
+.download-timesheet-button {
+    margin-bottom: 20px;
+    border-style: solid;
+    border-radius: 2px;
+    border-color: var(--darkColor);
+    border-width: 1px;
+    color: var(--darkColor);
+    background-color: white;
+    transition: 0.15s;
+}
+
+.download-timesheet-button:hover {
+    cursor: pointer;
+    background-color: var(--darkColor);
+    color: white;
+}
+
 @keyframes fadeInScale {
     from {
         opacity: 0;

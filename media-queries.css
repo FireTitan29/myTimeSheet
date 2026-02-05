@@ -39,6 +39,12 @@
 
 @media (max-width: 900px) {
 
+  .hide-this-mobile {
+    display: none;
+    margin: 0;
+    padding: 0;
+  }
+
   html {
     font-size: 18px;
   }
@@ -352,6 +358,10 @@
     flex-direction: column;
   }
 
+  table {
+    padding-top: 15px;
+  }
+
   .mobile-table-holder {
     display: flex;
     flex-direction: column;
@@ -537,4 +547,8 @@ tr td.isLate {
 tr:nth-child(even) td.isLate {
   background-color: var(--altRedColor);
 }
+
+  .download-timesheet-button {
+    margin: 0px;
+  }
 }

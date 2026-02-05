@@ -61,8 +61,9 @@ if (!defined('APP_RUNNING')) {
     $selectedYear  = (int)$year;
 
 ?>
+
 <?php if ($role === 'admin'): ?>
-<div class="mobile-table-holder table-scroll">
+<div id="timesheet" class="mobile-table-holder table-scroll">
 <div class="mobile-page-top">
     <form method="GET">
         <input type="hidden" name="view" value="table">
@@ -78,14 +79,14 @@ if (!defined('APP_RUNNING')) {
                 ? (int)$_GET['year']
                 : (int)$year
         ?>">
-        <label for="name"> Select Staff Member<br>
+        <label for="name"><span class="print-hide-element">Select Staff Member</span><br>
 
             <select class="optionBox-person" name="name" id="name" onchange="this.form.submit()">
                 <option hidden default <?php if (!isset($person)) {echo "selected";}?>><?php if ($person) {echo $person;} else {echo 'None';}?></option>
                 <?php foreach (getAllStaffNames() AS $name):?>
                     <option <?php if ($person === $name) echo 'selected' ?>><?php echo htmlspecialchars($name) ?></option>
                 <?php endforeach; ?>
-            </select>
+                </select>
         </label>
     </form>
 
@@ -109,6 +110,9 @@ if (!defined('APP_RUNNING')) {
     </label>
     <input class="yearInput" type="number" name="year" value="<?= $year?>" onchange="this.form.submit()">
 </form>
+<?php if ((isset($_GET["name"]) || isset($person)) && in_array($person, getAllStaffNames())): ?>
+    <button id="download" class="download-timesheet-button hide-this-mobile">Download Timesheet</button><br>
+<?php endif; ?>
 </div>
 <table>
     <tr>
@@ -161,4 +165,67 @@ function toggleRow(event, row) {
 
     row.classList.toggle('row-open', !isOpen);
 }
+</script>
+
+
+<!-- Adding ability to screenshot page to download to image -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+function expandAllRows() {
+  const rows = document.querySelectorAll('tr[data-has-expand="1"]');
+
+    rows.forEach(row => {
+        if (!row.classList.contains('row-open')) {
+        const contentBlocks = row.querySelectorAll('.comments-content, .comment-block');
+        const previewBlocks = row.querySelectorAll('.row-preview');
+
+        contentBlocks.forEach(block => block.style.display = 'block');
+        previewBlocks.forEach(el => el.style.display = 'none');
+
+        row.classList.add('row-open');
+        }
+    });
+    }
+    document.getElementById("download").addEventListener("click", async () => {
+    const element = document.getElementById("timesheet");
+    if (!element) {
+        console.error("Timesheet export element not found");
+        return;
+    }
+
+    expandAllRows();
+
+    const nameSelect = document.getElementById("name");
+    const person = nameSelect
+        ? nameSelect.options[nameSelect.selectedIndex].text.trim()
+        : "Unknown";
+
+    const monthSelect = document.getElementById("month");
+    const month = monthSelect
+        ? monthSelect.options[monthSelect.selectedIndex].text.trim()
+        : "Month";
+
+    const yearInput = document.querySelector('input[name="year"]');
+    const year = yearInput ? yearInput.value : "Year";
+
+    const safePerson = person.replace(/\s+/g, "-");
+    const safeMonth  = month.replace(/\s+/g, "-");
+    const filename = `Timesheet_${safePerson}_${safeMonth}-${year}.png`;
+
+    await document.fonts.ready;
+
+    html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = filename;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+    });
 </script>
