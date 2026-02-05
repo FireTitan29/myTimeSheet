@@ -65,9 +65,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Healthy Pet: <?= $page ?></title>
-    <link rel="stylesheet" href="mystyle.css?v=20">
+    <link rel="stylesheet" href="mystyle.css?v=21">
     <?php if (isset( $_SESSION['admin'])): ?>
-        <link rel="stylesheet" href="media-queries.css?v=20">
+        <link rel="stylesheet" href="media-queries.css?v=21">
     <?php endif; ?>
     <link rel="icon" type="image/x-icon" href="images/icons/staff_management_icon.svg">
 </head>
