@@ -293,7 +293,9 @@ function leaveTaken($staffID) {
         'family' => 0,
         'unpaid' => 0,
     ];
-    $period = getCurrentPayPeriod();
+    $currentYear = (int)date('Y');
+    $startDate = $currentYear . '-01-01';
+    $endDate = ($currentYear + 1) . '-01-01';
 
     $pdo = connectToDatabase();
 
@@ -316,8 +318,8 @@ function leaveTaken($staffID) {
 
     $stmt->execute([
         ':staffID'    => $staffID,
-        ':startDate' => $period['startDate'],
-        ':endDate'   => $period['endDate']
+        ':startDate' => $startDate,
+        ':endDate'   => $endDate
     ]);
 
     foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
