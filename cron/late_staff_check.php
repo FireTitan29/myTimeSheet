@@ -10,13 +10,6 @@ if (empty($lateStaff)) {
     exit;
 }
 
-$testStaff["staffName"] = "Gerald";
-$testStaff["expected_arrival_time"] = "19:00";
-
-$lateStaff = [
-    $testStaff,
-];
-
 $body = '
 <html>
 <head>
