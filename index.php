@@ -54,8 +54,8 @@
 
     $person = $_SESSION['name'] ?? '';
 
-    $month;
-    $monthNameStr;
+    $month = "";
+    $monthNameStr = "";
     $role = $_SESSION['user']['role'] ?? '';
 ?>
 

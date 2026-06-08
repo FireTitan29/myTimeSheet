@@ -6,9 +6,9 @@ $lateStaff = getLateStaff();
 
 echo "Starting...<br>";
 
-// if (empty($lateStaff)) {
-//     exit;
-// }
+if (empty($lateStaff)) {
+    exit;
+}
 
 $testStaff["staffName"] = "Gerald";
 $testStaff["expected_arrival_time"] = "19:00";

@@ -20,7 +20,7 @@
         $pdo = null;
     }
 
-    function getStaffMemberID(int $staffName) {
+    function getStaffMemberID($staffName) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT staffID FROM staff WHERE staffName = :staffName LIMIT 1');
 
@@ -31,7 +31,7 @@
         return $row ? $row['staffID'] : null;
     }
 
-    function getStaffMemberDetails(int $staffID) {
+    function getStaffMemberDetails($staffID) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT * FROM staff WHERE staffID = :id AND active = 1 LIMIT 1');
 
@@ -43,7 +43,7 @@
     }
 
 
-    function getRecord(int $staffMemberID, $date) {
+    function getRecord($staffMemberID, $date) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT * FROM timesheet WHERE staffID = :staffMemberID AND date = :currentDate LIMIT 1');
 
@@ -54,7 +54,7 @@
         return $row ? $row : null;
     }
 
-    function phoneNumberExists(int $number) {
+    function phoneNumberExists($number) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT phone FROM staff WHERE phone = :num LIMIT 1');
 
@@ -316,4 +316,5 @@
 
         return $result;
     }
+
 ?>
