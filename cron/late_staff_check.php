@@ -4,9 +4,18 @@ require_once __DIR__ . '/../php/database_functions.php';
 
 $lateStaff = getLateStaff();
 
-if (empty($lateStaff)) {
-    exit;
-}
+echo "Starting...<br>";
+
+// if (empty($lateStaff)) {
+//     exit;
+// }
+
+$testStaff["staffName"] = "Gerald";
+$testStaff["expected_arrival_time"] = "19:00";
+
+$lateStaff = [
+    $testStaff,
+];
 
 $body = '
 <html>
@@ -80,3 +89,5 @@ mail(
     $body,
     implode("\r\n", $headers)
 );
+
+echo "Email sent.";
