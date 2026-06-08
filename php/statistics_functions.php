@@ -285,7 +285,7 @@ function calculateStatistics(int $staffID): array {
     return $personStats;
 }
 
-function leaveTaken($staffID) {
+function leaveTaken(int $staffID) {
 
     $leaveArray = [
         'annual' => 0,

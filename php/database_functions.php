@@ -20,7 +20,7 @@
         $pdo = null;
     }
 
-    function getStaffMemberID($staffName) {
+    function getStaffMemberID(int $staffName) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT staffID FROM staff WHERE staffName = :staffName LIMIT 1');
 
@@ -31,7 +31,7 @@
         return $row ? $row['staffID'] : null;
     }
 
-    function getStaffMemberDetails($staffID) {
+    function getStaffMemberDetails(int $staffID) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT * FROM staff WHERE staffID = :id AND active = 1 LIMIT 1');
 
@@ -43,7 +43,7 @@
     }
 
 
-    function getRecord($staffMemberID, $date) {
+    function getRecord(int $staffMemberID, $date) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT * FROM timesheet WHERE staffID = :staffMemberID AND date = :currentDate LIMIT 1');
 
@@ -54,7 +54,7 @@
         return $row ? $row : null;
     }
 
-    function phoneNumberExists($number) {
+    function phoneNumberExists(int $number) {
         $pdo = connectToDatabase();
         $stmt = $pdo->prepare('SELECT phone FROM staff WHERE phone = :num LIMIT 1');
 
@@ -260,4 +260,60 @@
             return $expectedArrivalTime;
     }
 
+    function getLateStaff() {
+
+        if (date('N') >= 6) {
+            return [];
+        }
+
+        $pdo = connectToDatabase();
+
+        $today = date('Y-m-d');
+
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*)
+            FROM public_holiday
+            WHERE holiday_date = :today
+            AND country_code = 'ZA'
+        ");
+
+        $stmt->execute([':today' => $today]);
+
+        if ($stmt->fetchColumn() > 0) {
+            closeDatabase($pdo);
+            return [];
+        }
+
+        $stmt = $pdo->prepare("
+            SELECT
+                s.staffID,
+                s.staffName,
+                s.email,
+                s.expected_arrival_time
+            FROM staff s
+            LEFT JOIN timesheet t
+                ON t.staffID = s.staffID
+                AND t.date = CURDATE()
+            WHERE
+                s.active = 1
+                AND s.expected_arrival_time <= CURTIME()
+                AND (
+                    t.recordID IS NULL
+                    OR t.timeIn IS NULL
+                )
+                AND (
+                    t.is_leave IS NULL
+                    OR t.is_leave = 0
+                )
+            ORDER BY s.staffName
+        ");
+
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        closeDatabase($pdo);
+
+        return $result;
+    }
 ?>
